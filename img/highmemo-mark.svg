@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="HighMemo">
+  <!--
+    Site header mark. Derived from assets/icon.svg (the app icon) — same geometry, same
+    sage-green background, same paper H with ruled lines and a folded corner. Differences:
+    the square is rounded (a web header is not an OS icon mask) and the drop-shadow filter is
+    dropped, because at 32-40 px on a page the blur only muddies the form.
+
+    Do not restyle this independently of assets/icon.svg. If the app icon changes, regenerate
+    this from it.
+  -->
+  <defs>
+    <linearGradient id="m-bg" x1="1024" y1="0" x2="0" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A3C392"/>
+      <stop offset="0.5" stop-color="#88AD83"/>
+      <stop offset="1" stop-color="#657F63"/>
+    </linearGradient>
+    <linearGradient id="m-paper" x1="512" y1="168" x2="512" y2="856" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#EFF2EE"/>
+    </linearGradient>
+    <linearGradient id="m-fold" x1="670" y1="168" x2="788" y2="286" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C6D1C4"/>
+      <stop offset="1" stop-color="#DEE5DB"/>
+    </linearGradient>
+    <path id="m-h" d="
+      M256 168 H366 A20 20 0 0 1 386 188 V437 H638 V188 A20 20 0 0 1 658 168 H670
+      L788 286 V836 A20 20 0 0 1 768 856 H658 A20 20 0 0 1 638 836 V587 H386 V836
+      A20 20 0 0 1 366 856 H256 A20 20 0 0 1 236 836 V188 A20 20 0 0 1 256 168 Z"/>
+    <clipPath id="m-clip"><use href="#m-h"/></clipPath>
+  </defs>
+  <rect x="0" y="0" width="1024" height="1024" rx="228" fill="url(#m-bg)"/>
+  <use href="#m-h" fill="url(#m-paper)"/>
+  <g clip-path="url(#m-clip)" fill="#DCE3DB">
+    <rect x="200" y="243" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="319" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="395" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="471" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="547" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="623" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="699" width="640" height="11" rx="5.5"/>
+    <rect x="200" y="775" width="640" height="11" rx="5.5"/>
+  </g>
+  <path fill="url(#m-fold)" d="M670 168 V286 H788 Z"/>
+</svg>

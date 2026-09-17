@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HighMemo — Memos, AI, Sync &amp; Reminders</title>
+<meta name="description" content="HighMemo saves every memo to your device first, shows how your memos relate, and adds AI, Drive sync, and calendar only when you connect them yourself." />
+<meta name="robots" content="index,follow" />
+<meta name="color-scheme" content="light dark" />
+<link rel="canonical" href="https://highmemo.highgarden.app/" />
+<!--
+  Social card. og:image and og:url must be absolute, so they carry the published origin
+  (https://highmemo.highgarden.app/ — the same site as privacy.html, whose URL the app's
+  Settings screen hardcodes). If the repository is ever renamed these two lines break silently:
+  the page still renders, the card just stops loading. The image is
+  _workspace/promo/assets/concept/og_1200x630.png; its tagline is the approved one from
+  01_strategist_messaging.md §5, so the card says nothing the page does not.
+-->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="HighMemo" />
+<meta property="og:title" content="HighMemo — Memos, AI, Sync &amp; Reminders" />
+<meta property="og:description" content="HighMemo saves every memo to your device first, shows how your memos relate, and adds AI, Drive sync, and calendar only when you connect them yourself." />
+<meta property="og:url" content="https://highmemo.highgarden.app/" />
+<meta property="og:image" content="https://highmemo.highgarden.app/img/og-card.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="The HighMemo wordmark beside its notebook-H mark, with the line: Save first. Connect what you want, when you want." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="HighMemo — Memos, AI, Sync &amp; Reminders" />
+<meta name="twitter:description" content="HighMemo saves every memo to your device first, shows how your memos relate, and adds AI, Drive sync, and calendar only when you connect them yourself." />
+<link rel="icon" href="./img/highmemo-mark.svg" />
+<link rel="stylesheet" href="./site.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "HighMemo",
+  "url": "https://highmemo.highgarden.app/",
+  "description": "HighMemo saves every memo to your device first, shows how your memos relate, and adds AI, Drive sync, and calendar only when you connect them yourself.",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS, Android, macOS"
+}
+</script>
+<!--
+  This page is HighMemo's home page. It has two jobs beyond marketing:
+  it is the home-page URL for the Google OAuth consent screen, and it is the entry point for the
+  macOS download.
+
+  EVERY user-facing sentence here is lifted verbatim from copy that already passed
+  claim-verifier: _workspace/promo/01_strategist_messaging.md (§1, §2 S1-S5, §5) and
+  _workspace/promo/03_listing_play.md. Do not "improve" the wording. In particular:
+    - "shows how your memos relate" — the verb `relate` is what passed the verdict (02b §2).
+      connect / link / map / automatically / builds itself are all REJECTED.
+    - no encryption claim, no "never leaves your device" without its condition, no
+      "your location is never transmitted", no background/real-time sync, no Windows, no widgets.
+  New sentences must go through claim-verifier before they are published.
+
+  TERMINOLOGY (2026-07-31): the unit is a MEMO, never a "note" — the app's own UI says Memos and
+  New Memo. The only "note" left on this page is in code identifiers (id="stores-note",
+  id="mac-note", class="note") and one alt text where "a note that AI can make mistakes" means a
+  notice. Do not rename those ids; they are referenced by aria-describedby.
+
+  ALSO FIXED 2026-07-31: this page was still carrying "AI output follows the language you set.",
+  which claim-verifier REJECTED (V1b) — the default appLanguage is 'auto', which follows the
+  language of the memo, not a language you set. Never restore that sentence on any surface.
+
+  4TH PASS, 2026-07-31 — three additions, each with its reasoning at the section itself:
+    1. #location — location reminders promoted out of the reminders card into their own section.
+       No radius number, no denial that coordinates are transmitted. Read the comment there before
+       touching a word of it; both of those are how the published privacy policy became false.
+    2. #theme — the theme picker as a feature, plus a light/dark pair that always shows BOTH cuts.
+       This is a NEW CLAIM (S26 in 05_site_report.md §29) — claim-verdicts.md has no entry for it,
+       so every clause is annotated with the file:line it came from and nothing beyond that is said.
+    3. A Windows "coming soon" button in #download. This departs from a standing ban on the word;
+       the comment there explains why the departure is narrow and what still may not be said.
+
+  ALL IMAGES ARE NOW WIRED (2026-07-31, after 438b27b8 landed the dark set). Two different
+  mechanisms, and the difference is the point:
+    - #theme renders the light AND dark memo list at all times. A prefers-color-scheme swap would
+      show a light-mode visitor only the light cut, on the one block that exists to prove a dark
+      theme is there.
+    - #location and the four #screens figures use <picture> + prefers-color-scheme, because there
+      the subject is the feature, not the theme.
+  Never put a <source> on a cut whose dark file does not exist: it breaks the image for dark-mode
+  visitors and looks perfectly fine in light mode. As of 438b27b8 the cuts WITHOUT a dark capture
+  are 04, 05, 06, 09, 10, 11 and 12 on both platforms.
+
+  6TH PASS, 2026-07-31 — "글보다는 스크린샷이 좋습니다. 백문이 불여일견입니다." (the user, verbatim).
+  Seventeen new captures landed and this page was told to get SHORTER while showing MORE.
+
+  WHAT WAS ADDED:
+    - #mentions — three iPhone cuts of `@` (person suggestions, memo suggestions, and searching for
+      a person). Captions C16/C17 from 04_visual_manifest.md §13-6 and the already-PASS'd C14.
+      claim-verdicts.md §9-A judged C16 and C17 while this page was being built: BOTH PASS.
+    - #mac — one Mac cut of the live markdown editor, and #download got the Mac window itself.
+      The Mac frames are 1440x960 LANDSCAPE and use `figure.shot.wide`; they must never go in
+      `.shot-grid` or `.pair`, which size their columns for a tall phone frame (site.css explains).
+      Verdicts (claim-verdicts.md §9-B): D2 PASS as written. D1 came back CONDITIONAL on ONE WORD —
+      the draft said "the whole canvas", and the canvas continues below the panels, so what is on
+      screen is part of it. `the whole` was deleted here and in the Mac guide; nothing else changed.
+      Do not put it back, and do not write any version that implies every memo is visible at once
+      (in the capture they are, but only because the demo profile holds twelve).
+    - claim-verdicts.md §2 correction 3 landed mid-edit and REJECTED "expand it, then Add memo" in
+      the three guides: the pill sits under every Google event row with no expanding required
+      (ReminderCalendarSheet.tsx:752-771 has no isExpanded condition). All three guides were fixed.
+      THIS CARD WAS DELIBERATELY LEFT ALONE. "Open an event and choose Add memo" is not the rejected
+      wording, and it was judged not false — so it stays as approved. It was briefly changed to
+      "under an event" in this pass and changed back: rewriting an approved sentence to make it
+      marginally more precise creates a claim that has to be judged again, for nothing.
+      That one sentence has now been corrected twice ("press +", then "expand it first"). If it needs
+      a third pass, change the guides and leave this card.
+
+  WHAT WAS CUT, AND THE RULE USED: a sentence went only if a screenshot on this page now shows the
+  same thing, or if the page said it twice. Deleting an approved sentence is free; REWRITING one
+  invents a claim that has to be judged again, so text was moved and merged rather than reworded.
+    - the whole "Dark, light, or whatever your device is doing" feature card — #theme has the same
+      facts AND the two frames. Its clauses were moved into #theme verbatim, not rewritten.
+    - the first clause of #location's copy — the heading and the figcaption both already said
+      "pin a place and the memo comes back".
+    - "or mention one inside another with @" from the relate card — #mentions now shows it.
+  NOTHING conditional, platform-scoped or negative was cut. "Reminder notifications are delivered
+  on iPhone and Android", "the Mac app has none", "HighMemo shows ads", "once an AI provider is
+  connected" are the reason this page is true, not padding.
+-->
+</head>
+<body class="landing-page">
+
+<header class="site-head landing-head">
+  <div class="site-head-in">
+    <a class="brand" href="./index.html">
+      <img src="./img/highmemo-mark.svg" alt="" width="26" height="26" />
+      HighMemo
+    </a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="#features">Features</a>
+      <a href="#guides">User guides</a>
+      <a href="#download">Download</a>
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero landing-hero">
+  <div class="hero-in">
+    <div class="hero-copy">
+      <h1>Write anything. Find what matters.</h1>
+      <p class="tagline">HighMemo helps you capture freely, organize memos in the background, and revisit connected ideas without hunting through a long list. Connect an AI for richer summaries, categories and semantic recommendations.</p>
+      <p class="promise">Set a time or location reminder so the right memo returns when you need it. No account is required: your memos stay on your device by default, and AI, Google Drive, and read-only Google Calendar are connections you choose.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#guides">Read the user guide</a>
+        <a class="btn" href="#download">Get HighMemo</a>
+      </div>
+    </div>
+    <div class="hero-shot hero-stage">
+      <img src="./img/ios-2026-08-detail-light.jpg" width="1320" height="2868"
+           alt="A HighMemo memo open on iPhone, showing its title, reminder, summary, content, dates and tags in one detail view." />
+    </div>
+  </div>
+</section>
+
+<main class="wide landing">
+
+<h2 id="features">What HighMemo does <a class="anchor" href="#features" aria-label="Link to this section">#</a></h2>
+
+<div class="features">
+
+  <div class="feature">
+    <h3>Saving never waits</h3>
+    <!-- Two paragraphs merged into one on 2026-07-31. Not one word changed: fewer blocks, same facts. -->
+    <p>The memo is on your device the moment you send it, and any tidying happens afterwards in the background. If that tidying fails, nothing you already had is erased. Share a link from any app and it lands as a memo — the title, summary and thumbnail fill in behind you.</p>
+  </div>
+
+  <div class="feature">
+    <h3>How your memos relate</h3>
+    <!--
+      "or mention one inside another with @" was deleted here on 2026-07-31 and is not lost: the
+      #mentions section below now SHOWS it, in three screenshots, and says the one thing this card
+      could not fit — that a memo mention and a person mention behave in opposite directions.
+      The tag-hub sentence stays word for word. `relate` is the verb that passed the verdict.
+    -->
+    <p>Memos that share a tag gather together, and the tag's name sits at the centre. Link two memos yourself — those links are never removed by an automatic rebuild. Folders, tags and pinning work with no account and no AI.</p>
+  </div>
+
+  <div class="feature">
+    <h3>Organized once you connect an AI</h3>
+    <!--
+      "one of 21 categories" was here and was downgraded (02_verifier_claims.md §7, case 7): the
+      category the AI returns is saved as-is and is never checked against the list, and the graph
+      only knows 15 colours. A promotional surface has no room for that, so it drops the number.
+      The three guides keep it and explain it — that is where "why is this dot grey?" gets an answer.
+    -->
+    <p>Once an AI provider is connected, every memo you save comes back with a title, a summary, tags and a category.</p>
+  </div>
+
+  <div class="feature">
+    <h3>Your schedule beside your memos</h3>
+    <p>Connect Google Calendar and your schedule sits beside your memos — access is read-only, so HighMemo never creates, edits or deletes an event. Save a memo and HighMemo suggests the events it looks related to; you choose whether to link it. Open an event and choose <strong>Add memo</strong> to start a memo already attached to it.</p>
+  </div>
+
+  <div class="feature">
+    <h3>Reminders that know when</h3>
+    <!--
+      Two details were cut from the approved listing sentence rather than repeated here:
+      "(pick the weekdays)" and "radius from 100 m to 5 km". Both describe what the code accepts,
+      not what the UI offers — the repeat picker writes a single weekday, and the radius stepper
+      caps at 2 km. Dropping a detail is safe; asserting an unreachable number is not.
+      Flagged for re-verification in _workspace/promo/05_site_report.md.
+
+      2026-07-31 (4th pass): the location half of this card MOVED to the #location section below,
+      where it has a screenshot. The sentences were not rewritten — they were relocated verbatim,
+      which is what §5 of docs/store-listing/README.md did with the Add memo sentence. Do not
+      restore them here as well; saying the same thing twice on one page is how a page starts
+      reading like filler, and it would then have to be corrected in two places.
+    -->
+    <p>Put a reminder on a memo — once, daily, weekly or monthly. Or pin a place instead, which is the next section.</p>
+    <p class="sub">Reminder notifications are delivered on iPhone and Android.</p>
+  </div>
+
+  <div class="feature">
+    <h3>Your storage, not ours</h3>
+    <p>Connect a Google account and your phone and Mac see the same memos. They live in your own Google Drive app-data folder — there is no HighMemo server and no HighMemo account, so we cannot look at them. Images and attachments travel too. Sync runs when you open the app and every 5 minutes while it is open, plus a button whenever you want.</p>
+  </div>
+
+  <div class="feature">
+    <h3>Your AI, your key — or no AI at all</h3>
+    <p>You bring the AI. Paste the API key of a service you already pay for and requests go from your device straight to that provider — there is no server of ours in between. Or pick a model that runs on the device itself: download it once and your memo text never leaves the device, with no internet needed. Or connect nothing at all and keep using the app.</p>
+  </div>
+
+  <div class="feature">
+    <h3>Search, and an export you own</h3>
+    <p>Type to filter by title, body or tag; <code>#tag</code> matches that tag exactly. Export everything as one JSON file, with your attached photos embedded in it.</p>
+  </div>
+
+  <!--
+    THE THEME FEATURE CARD WAS REMOVED HERE on 2026-07-31 (6th pass), and its sentences were moved
+    into #theme below WITHOUT rewriting them. The card and that section carried the same facts, and
+    #theme is the one with the two frames in it — a card that repeats what a picture below it proves
+    is exactly the padding the user asked to be rid of. Do not restore the card; restoring it means
+    the same claim needs keeping true in two places.
+
+    The evidence list for those sentences moved with them — it is now the comment above #theme.
+  -->
+
+</div>
+
+<!--
+  ============================================================================================
+  LOCATION REMINDERS — promoted out of the reminders card on 2026-07-31 (4th pass) because it is
+  one of the five strengths and was getting one sentence.
+
+  WHAT MAY AND MAY NOT BE SAID HERE (claim-verdicts.md §5, and its ❌ column):
+    ✅ arrival is decided on the device, and the notification is created there too
+    ✅ it fires once per visit
+    ✅ location access is requested only when a memo actually has a location reminder
+    ✅ iPhone and Android; on Mac arrival is only noticed while the app is open
+    ❌ ANY denial of transmission — "your location is never transmitted", "stays on your device",
+       "we never see where you are". Opening the picker reverse-geocodes the current coordinates
+       against nominatim.openstreetmap.org (LocationPickerSheet.tsx:97-107), every pin does it
+       again (:132), place search does it per keystroke (:135-166), and attached photos send their
+       EXIF GPS to the same host (App.tsx:6888-6897). The published privacy policy is already
+       false on exactly this point (RELEASE_READINESS.md B5) — do not add a second surface to fix.
+    ❌ ANY radius number. The three guides carry it correctly (100 m to 2 km, 50 m steps, 300 m by
+       default) because they are reference documents; a promotional surface that repeats a UI
+       constant goes stale the day the stepper changes, and then three files have to move together.
+       This page paid that bill once already (5 km → 2 km).
+    ❌ "the moment you arrive" / "instantly" — OS geofences vary and the desktop check is 15 s.
+  ============================================================================================
+-->
+<h2 id="location">Pin a place, and the memo comes back <a class="anchor" href="#location" aria-label="Link to this section">#</a></h2>
+
+<div class="visual-sequence">
+  <!--
+    <picture> auto-switch, NOT a side-by-side pair — and the difference matters for this cut
+    specifically. visual-producer reports that the app does not use a theme-aware map style, so in the
+    dark capture the MAP TILES stay light and only the sheet and the search bar go dark. Shown alone
+    that is simply the app; shown next to the light cut it reads as "the map does not follow the
+    theme", which turns a screenshot into a complaint. The side-by-side lives at #theme with the memo
+    list, which does change completely.
+
+    Caption: 04_visual_manifest.md §1 cut 13, PASS'd (C13), and §12-3 confirms the dark capture is the
+    same screen — same address, same radius — so the same caption applies to both.
+
+    The alt text describes the 300 m on screen, which is the stepper's default; the manifest judged
+    that irrelevant to the radius question. Describing what is in a picture is not asserting a range,
+    and the prose on this page still carries no radius number at all.
+  -->
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-13_location_reminder.jpg" />
+      <img src="./img/ios-13_location_reminder.jpg" width="405" height="880" loading="lazy"
+           alt="Setting a location reminder on iPhone: a map with a dropped pin and a shaded circle around it, the street address of the pin above the map, a radius row reading 300 m with minus and plus buttons, and a Set Reminder button at the bottom." />
+    </picture>
+    <figcaption><strong>1. Pick the place.</strong> Drop a pin, confirm the address and set the arrival radius.</figcaption>
+  </figure>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-detail-dark.jpg" />
+      <img src="./img/ios-2026-08-detail-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="A HighMemo memo detail on iPhone with its title, reminder space, summary, source text, dates and tags." />
+    </picture>
+    <figcaption><strong>2. Keep it with the memo.</strong> The reminder stays beside the note, summary and source that give it context.</figcaption>
+  </figure>
+</div>
+<p class="feature-note">Arrival is decided on the device and the notification is created there too — it fires once per visit, not every time you move around inside the same place. Location reminders are delivered on iPhone and Android; the Mac app notices arrival only while it is open.</p>
+</div>
+
+<!--
+  ============================================================================================
+  DARK AND LIGHT. The pair below deliberately renders BOTH images at all times.
+
+  A prefers-color-scheme swap was the obvious thing to reach for and it is the wrong thing HERE: a
+  visitor whose device is in light mode would be shown the light cut and would never see that a dark
+  theme exists, on the one part of the page whose entire job is to show that it exists. Auto-swapping
+  is right in the "What it looks like" grid below — there the point is the feature in the picture,
+  not the theme — and that is what the grid does.
+  ============================================================================================
+-->
+<h2 id="theme">Dark and light <a class="anchor" href="#theme" aria-label="Link to this section">#</a></h2>
+
+<!--
+  S26 and S31 — **both PASS**, all seven sub-claims (claim-verdicts.md §9-C, which opened N-12 for
+  the theme). The clauses below were written from the code before that verdict existed, and the
+  verdict confirmed each one, so nothing here changed. Keep them as they are:
+    - three choices, in this order in the UI: Dark / Light / System
+      — SettingsScreen.tsx:2313-2317 (the array the row maps over)
+    - the section is called Appearance and it is the FIRST section of Settings
+      — SettingsScreen.tsx:2291-2301
+    - System is the default — useAppStore.ts:343 (`themeMode: 'system'`)
+    - System reads the device — App.tsx:854-856 (`useColorScheme()`)
+    - the choice is remembered — useAppStore.ts:901 (themeMode is in the persisted allow-list)
+    - all three platforms: one shared SettingsScreen with no Platform gate on this section, rendered
+      both docked (App.tsx:5498) and as a sheet (App.tsx:5848)
+    - the whole app, not one screen: there is one theme object, appChrome, which applyTheme()
+      MUTATES IN PLACE (appChrome.ts:45 — markdownNative.ts:10 exists to say so), and
+      App.tsx:864-867 bumps _themeVersion so every component built on useThemedStyles re-renders.
+  Deliberately NOT claimed: how the theme looks, "OLED", "easy on the eyes", per-page or
+  automatic-at-sunset switching (none exist), that it follows the device instantly (the value is
+  read at render), or a screen-by-screen list. N-12 turns that last one into a hard boundary — TWO
+  surfaces do not follow the theme: the MAP TILES (one fixed style URL, no dark variant —
+  LocationPickerSheet.tsx:29, LocationMapPanel.tsx:44) and the graph's dot colours (category
+  palette, GraphCanvas.tsx:57-72). So "every screen follows it" and "the map follows it too" are
+  REJECTED, and the same verdict is why #location auto-switches instead of showing a light/dark pair.
+  Also do not strengthen "System follows your device" into "always reflects your device exactly":
+  when the OS reports no scheme at all, App.tsx:856 falls back to dark.
+
+  These two sentences ARE the feature card that used to sit in the grid above; it was deleted on
+  2026-07-31 rather than kept in parallel. The wording was not touched in the move.
+-->
+<p><span class="path">Settings → Appearance</span> is the first thing in Settings and it offers three choices: <strong>Dark</strong>, <strong>Light</strong> and <strong>System</strong> — and the choice applies to the whole app rather than to one screen. System follows your device, and it is what you get before you change anything. Your choice is remembered, and the same three are there on iPhone, Android and Mac.</p>
+
+<!--
+  WHY THE MEMO LIST IS THE PAIR, and not one of the other five screens that have a dark capture:
+  visual-manifest §12-3 records that the dark 01 is the SAME scroll position and the SAME rows as the
+  light one, so the only difference a reader sees between these two frames is the theme. That is the
+  whole requirement for a comparison. Two other candidates were rejected on the producer's own
+  evidence: 13_location_reminder keeps light MAP TILES in dark mode (the app has no theme-aware map
+  style), and 08_ai_assistant is a live model answer, where iPhone and Android hold DIFFERENT
+  responses — fine for auto-switching, wrong for a pair.
+
+  Both images render at all times, by design. See the section comment above.
+
+  No loading="lazy" on the light frame: it is the first thing this section is for, and above-the-fold
+  by the time anyone reaches the heading. The dark frame keeps it.
+-->
+<div class="pair">
+  <figure class="shot">
+    <img src="./img/ios-2026-08-list-light.jpg" width="1320" height="2868"
+         alt="HighMemo's memo list on iPhone in the light theme: a search field, filter chips and a list of fictional demonstration memos." />
+    <figcaption>Light</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="./img/ios-2026-08-list-dark.jpg" width="1320" height="2868" loading="lazy"
+         alt="The same fictional demonstration memo list in the dark theme, with the same search field and filter chips." />
+    <figcaption>Dark</figcaption>
+  </figure>
+</div>
+
+<h2 id="screens">What it looks like <a class="anchor" href="#screens" aria-label="Link to this section">#</a></h2>
+
+<div class="shot-grid">
+  <!--
+    THESE CURRENT CAPTURES AUTO-SWITCH; THE #theme PAIR DOES NOT. The subject of each cut here is the
+    feature in it, not the theme, so following the visitor's own scheme is the right behaviour.
+    Their light and dark counterparts come from the same separate simulator profile.
+
+    THE ALT TEXT IS UNCHANGED BY THE DARK SOURCE, deliberately. It describes what is on the screen,
+    and the screen is identical; a screen-reader user does not need to be told the background colour,
+    and duplicating each alt into a light and a dark variant would double the number of sentences to
+    keep true for no gain.
+
+    If a dark file is ever removed, remove its <source> in the same edit. A <source> pointing at a
+    missing file breaks the image for dark-mode visitors ONLY and looks perfectly fine in light mode.
+
+    04_visual_manifest.md §12-1 also replaced the LIGHT 02 and 08 cuts under the same filenames
+    (b165b392 changed the reminder chip to a bell and fixed list-marker alignment). The alt text and
+    captions here survived that unchanged because none of them describes an icon, a colour or a
+    bullet — which is the reason to keep writing them that way.
+  -->
+  <!--
+    The graph caption is the one 04_visual_manifest.md §1 wrote specifically for this cut, because
+    the approved tag-hub sentence ("memos that share a tag gather together, and the tag's name sits
+    at the centre") does NOT reproduce here — the labels you can read are truncated memo titles, not
+    tag names. The tag-hub sentence is still fine as body copy above; it is not fine as this cut's
+    caption. Do not claim what the colours mean either: in this demo corpus colour comes from the
+    category, but on a device that has the embedding model it comes from the vector instead.
+  -->
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-graph-dark.jpg" />
+      <img src="./img/ios-2026-08-graph-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="The graph view: 54 memos as coloured dots gathered into loose clusters, each dot labelled with the beginning of its memo title, an overview map at the bottom left and a New Memo button at the bottom." />
+    </picture>
+    <figcaption>Every memo you have, on one canvas.</figcaption>
+  </figure>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-detail-dark.jpg" />
+      <img src="./img/ios-2026-08-detail-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="A memo open in detail view, showing a title, a reminder, a summary card, its text, created and updated dates, tags and related-memo space." />
+    </picture>
+    <figcaption>A memo with an AI-written summary, a tag, a time reminder and a related memo. The summary, tags and category appear once an AI provider is connected.</figcaption>
+  </figure>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-calendar-dark.jpg" />
+      <img src="./img/ios-2026-08-calendar-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="The calendar view: a month grid for August 2026 with dots on days that have entries, and below it the agenda for Friday, August 14 showing a 10:00 AM entry labelled Busan weekend packing list with a Reminder badge." />
+    </picture>
+    <figcaption>The calendar puts your reminders — and, if you connect Google Calendar, your events — next to your memos.</figcaption>
+  </figure>
+</div>
+
+<p class="sub">The latest screenshots use a separate simulator profile with fictional demonstration memos and local-only example events.</p>
+
+<section class="platform-showcase" aria-labelledby="android-title">
+  <div class="platform-showcase-copy">
+    <p class="eyebrow">Android</p>
+    <h2 id="android-title">The same library, ready in your pocket <a class="anchor" href="#android-title" aria-label="Link to this section">#</a></h2>
+    <p>HighMemo uses the same fictional demo library on Android: browse the full memo list, open a saved link with its image and summary, return to the graph, or check a reminder in the calendar.</p>
+  </div>
+  <div class="platform-shot-grid">
+    <figure class="shot">
+      <img src="./img/android-2026-08-list-light.jpg" width="396" height="880" loading="lazy"
+           alt="HighMemo's current Android memo list with search, filter chips, thumbnails and fictional demonstration memos." />
+      <figcaption>Search and filter a growing library.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="./img/android-2026-08-detail-light.jpg" width="396" height="880" loading="lazy"
+           alt="HighMemo's current Android memo detail showing the memo type, reminder, summary, markdown content and saved context together." />
+      <figcaption>Keep the image, summary and context together.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="./img/android-2026-08-graph-light.jpg" width="396" height="880" loading="lazy"
+           alt="The current Android graph view with colour-coded memo nodes, labels, a miniature overview map and a New Memo button." />
+      <figcaption>Step back into the connections between notes.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="./img/android-2026-08-calendar-light.jpg" width="396" height="880" loading="lazy"
+           alt="The current Android calendar in August 2026 with reminder dates marked in the fictional demonstration library." />
+      <figcaption>See memo reminders alongside your day.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="feature-showcase" aria-labelledby="recommend-title">
+  <div class="showcase-copy">
+    <p class="eyebrow">Find the thread again</p>
+    <h2 id="recommend-title">Recommendations, not a dead end <a class="anchor" href="#recommend-title" aria-label="Link to this section">#</a></h2>
+    <p>HighMemo can search by meaning once you download the optional on-device search model. A memo's <strong>Recommend</strong> section then surfaces notes that look similar, so an old idea can lead you back into the rest of the story.</p>
+    <p class="sub">Recommendations are suggestions. <strong>Related</strong> remains the list of links you chose yourself.</p>
+  </div>
+  <figure class="shot wide">
+    <img src="./img/desktop-2026-08-main-light.jpg" width="2880" height="1920" loading="lazy"
+         alt="HighMemo on Mac showing the graph, an open memo detail and a searchable memo list together." />
+    <figcaption>Browse the graph, open a memo and keep the rest of your library within reach.</figcaption>
+  </figure>
+</section>
+
+<section class="feature-showcase feature-showcase-reverse presentation-showcase" aria-labelledby="presentation-title">
+  <div class="showcase-copy">
+    <p class="eyebrow">Read it as a story</p>
+    <h2 id="presentation-title">A presentation view for exploring a memo <a class="anchor" href="#presentation-title" aria-label="Link to this section">#</a></h2>
+    <p>Open a memo in Presentation View when you want its title, images, summary and structured text to take the page. It is a calmer way to revisit a saved article, plan or collection of ideas.</p>
+    <p class="sub">The same focused reading view is available on iPhone. At the end of a memo, <strong>Related</strong> keeps the links you chose and <strong>Recommend</strong> suggests semantically similar notes to explore next.</p>
+  </div>
+  <div class="presentation-shots">
+    <figure class="shot wide">
+      <img src="./img/desktop-2026-08-presentation-light.jpg" width="4112" height="2580" loading="lazy"
+           alt="HighMemo Presentation View on Mac showing the on-call handover memo, two manually related memos, and a recommended memo at the end of the reading layout." />
+      <figcaption>On Mac, Related and Recommend stay visible at the end of a focused reading surface.</figcaption>
+    </figure>
+    <figure class="shot presentation-phone">
+      <img src="./img/ios-2026-08-presentation-dark.jpg" width="1320" height="2868" loading="lazy"
+           alt="HighMemo Presentation View on iPhone showing a fictional Busan weekend guide with an image, summary, tags and reading actions." />
+      <figcaption>On iPhone, the same memo becomes a magazine-like reading view.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!--
+  ============================================================================================
+  MENTIONS — new section, 2026-07-31 (6th pass). Three captures, one sentence. It replaces the
+  clause "or mention one inside another with @" that used to be inside the relate feature card.
+
+  THE CAPTIONS ARE C16 AND C17 FROM 04_visual_manifest.md §13-6, VERBATIM. Both are now **PASS**
+  (claim-verdicts.md §9-A). Two things about them are not stylistic:
+
+  1. DO NOT MERGE C16 AND C17 INTO ONE SENTENCE. The verdict gives three independent reasons, any
+     one of which is enough. (a) The link lifetimes are OPPOSITE: a memo mention is ADD-ONLY (delete
+     the mention and the link survives), a person mention is RECONCILED against the body (delete the
+     mention and the link goes) — so one sentence about durability is false at one end, which is why
+     C12 was rejected. (b) The TRIGGER STATE differs: a bare `@` offers people only, because memo and
+     event candidates need at least one typed character (useMentionSuggest.ts:106, :117). (c) A
+     caption is judged against its own picture, and a merged sentence is not reproduced by either
+     frame. The paragraph below keeps the two directions apart on purpose.
+     Two more boundaries from the same verdict: do not write "type any word from the memo" (the match
+     is on the TITLE only, :108), and do not add "and the link stays" to C16.
+  2. C16 says "the people you have mentioned before come up" and stops there. It does not say "and
+     the link stays", because in these two frames there is no result yet — only a suggestion row.
+
+  WHAT THESE FRAMES DO NOT SHOW, so the page must not say it: the EVENT badge. One `@` covers
+  people, memos AND calendar events (useMentionSuggest.ts:2-7), but the demo device had zero
+  events, so no event chip appears in either cut (04_visual_manifest.md §13-3 note 3). Do not add
+  "or an event" to a caption on the strength of these pictures.
+
+  The third cut is the RESULT, and its caption is C14 — already PASS'd and already used, word for
+  word, on the Android guide. It was reused rather than rewritten: the same screen with two
+  different sentences on two surfaces is how surfaces drift apart.
+
+  iPhone cuts only, like everything above. The Android equivalents live in the Android guide,
+  where a reader is looking at their own platform. Note for whoever adds them elsewhere: iOS has
+  16_search_person, ANDROID DOES NOT — its person-search cut is 05_search_person and its dark
+  partner is android-dark-05 (04_visual_manifest.md §13-4). Building a <picture> from one name
+  breaks the other platform.
+  ============================================================================================
+-->
+<h2 id="mentions">Mention a person or a memo <a class="anchor" href="#mentions" aria-label="Link to this section">#</a></h2>
+
+<div class="shot-grid">
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-list-dark.jpg" />
+      <img src="./img/ios-2026-08-list-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="HighMemo's memo list on iPhone with search and filter controls above fictional demonstration memos." />
+    </picture>
+    <figcaption>Search your library by title, tag or person whenever you need the original context.</figcaption>
+  </figure>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-detail-dark.jpg" />
+      <img src="./img/ios-2026-08-detail-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="A HighMemo memo detail on iPhone with a summary card, reminder, content and tags." />
+    </picture>
+    <figcaption>Open the source memo before linking it, so the connection always has context.</figcaption>
+  </figure>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-calendar-dark.jpg" />
+      <img src="./img/ios-2026-08-calendar-light.jpg" width="1320" height="2868" loading="lazy"
+           alt="The HighMemo calendar on iPhone with reminder entries shown below an August month grid." />
+    </picture>
+    <figcaption>Connected events and reminders give saved notes a date to return to.</figcaption>
+  </figure>
+</div>
+
+<p>A memo you mention stays linked even if you delete the mention. <strong>A person works the other way round</strong> — there the text is the record, so taking the name back out of the body takes the link with it.</p>
+
+<!--
+  ============================================================================================
+  THE MAC — new section, 2026-07-31 (6th pass), because the user asked for the desktop app to be
+  visible on the page that hands it out. One capture here, one more in #download, three in the Mac
+  guide. The other three landing sections stay iPhone.
+
+  THE CAPTION IS D2 FROM 04_visual_manifest.md §14-4 — **PASS** (claim-verdicts.md §9-B) — AND ITS
+  LAST TWO WORDS ARE LOAD-BEARING. "Mac only" is the condition on verdict N-6: the live editor is the
+  `Platform.OS === 'web'` branch (App.tsx:7741 → :7747) and the native sibling is a placeholder
+  (MarkdownWysiwyg.tsx:1-8). The verdict says in as many words: do not approve an edit that removes
+  "Mac only". Delete those two words and the sentence becomes a promise the phones do not keep.
+
+  The paragraph under the figure carries three claims and each is deliberate: three panels at once
+  (D1's subject, and it does not say "the whole canvas"), no ads on Mac (already said in #before),
+  and reminder notifications NOT being delivered on Mac. The last one is a negative and stays.
+
+  These files are 1440x960. `figure.shot.wide` exists for them; `.shot-grid` and `.pair` size their
+  columns for a 405x880 phone frame and would render this window at 320px wide, where the whole
+  point of it — three panels with content in them — is not visible. See site.css and
+  04_visual_manifest.md §14-6.
+  ============================================================================================
+-->
+<h2 id="mac">On the Mac <a class="anchor" href="#mac" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot wide">
+  <img src="./img/desktop-2026-08-main-light.jpg" width="2880" height="1920" loading="lazy"
+       alt="HighMemo's current Mac workspace with the graph, memo detail and memo list open together." />
+  <figcaption>On the Mac, markdown renders as you type — headings, checkboxes and code in the pane you are typing in. <strong>Mac only.</strong></figcaption>
+</figure>
+
+<p>HighMemo on Mac is the same app in a window: the memo list, the memo you are reading and the graph can all be on screen at once. It shows no ads. Reminder notifications are not delivered on Mac — <a href="./guide-desktop.html">the Mac guide</a> is explicit about which platform does what.</p>
+
+<p class="sub">The Mac screenshots on this page use the same demonstration memos.</p>
+
+<h2 id="guides">User guides <a class="anchor" href="#guides" aria-label="Link to this section">#</a></h2>
+
+<p>Every feature, where to find it, and what it needs before it works. Pick your platform — the three guides differ where the app actually differs.</p>
+
+<div class="btn-row">
+  <a class="btn" href="./guide-ios.html">iPhone &amp; iPad guide</a>
+  <a class="btn" href="./guide-android.html">Android guide</a>
+  <a class="btn" href="./guide-desktop.html">Mac guide</a>
+</div>
+
+<h2 id="download">Get HighMemo <a class="anchor" href="#download" aria-label="Link to this section">#</a></h2>
+
+<!--
+  Three platforms, named positively and nothing else. The messaging doc bans any mention of
+  Windows or a browser version outright (01 §6-C), so this line does not deny them either —
+  listing exactly what exists answers the question without introducing the words.
+-->
+<p>HighMemo runs on iPhone, Android and Mac.</p>
+
+<h3>iPhone and Android</h3>
+
+<div class="btn-row">
+  <a class="btn btn-primary" href="https://apps.apple.com/us/app/highmemo/id6799994183">Download on the App Store</a>
+  <button class="btn" type="button" disabled aria-describedby="stores-note">Google Play — not yet available</button>
+</div>
+<p id="stores-note" class="sub">HighMemo is available for iPhone and iPad on the App Store. The Google Play release is not available yet.</p>
+
+<h3>Mac</h3>
+
+<div class="btn-row">
+  <a class="btn btn-primary" href="https://github.com/HighGarden-Studio/HighMemo-Release/releases/download/v1.1.0/HighMemo-1.1.0-arm64.dmg" aria-describedby="mac-note">Download for Mac — Apple Silicon</a>
+  <a class="btn" href="https://github.com/HighGarden-Studio/HighMemo-Release/releases/download/v1.1.0/HighMemo-1.1.0.dmg" aria-describedby="mac-note">Download for Mac — Intel</a>
+</div>
+<p id="mac-note" class="sub">HighMemo 1.1.0 supports both Apple Silicon and Intel Macs. Pick Apple&nbsp;Silicon for an M-series Mac and Intel for anything older — <span class="path">Apple menu → About This Mac</span> tells you which you have.</p>
+
+<!--
+  What you download from the buttons above. Caption D1 from
+  04_visual_manifest.md §14-4, CONDITIONAL and now satisfied: the draft's "the whole canvas" was cut
+  (claim-verdicts.md §9-B) because the canvas continues past the panels. What is left describes the
+  LAYOUT and claims no feature, which is also deliberate — the demo profile has no AI provider
+  connected, so nothing in this frame may be attributed to AI. The summary card in the middle panel
+  is rule-engine output (§14-3) and no caption or alt on this page says otherwise. The blue @Mira
+  link is not mentioned either, on the verdict's advice: naming it drags in the reconcile behaviour
+  that C16's boundary covers.
+-->
+<figure class="shot wide">
+  <img src="./img/desktop-2026-08-presentation-light.jpg" width="4112" height="2580" loading="lazy"
+       alt="HighMemo Presentation View on Mac showing an on-call handover memo, related memos and a recommended memo in a focused reading layout." />
+  <figcaption>On the Mac, revisit a memo in a spacious reading layout, then continue through related and recommended notes.</figcaption>
+</figure>
+
+<h4>What to expect the first time you open it</h4>
+<p>HighMemo for Mac is distributed from this page, not from the Mac App Store. macOS checks apps from outside the App Store the first time you open one, so opening it may take a moment longer than usual. If macOS refuses to open it, go to <span class="path">System Settings → Privacy &amp; Security</span>, scroll to the message about HighMemo, and choose <strong>Open Anyway</strong>.</p>
+<p>The Mac app keeps itself up to date. It checks for a new version when it starts and every few hours after that, downloads one quietly in the background, and puts it in place the next time you quit and reopen. There is no update button and no prompt — you are never interrupted mid-sentence by one.</p>
+
+<!--
+  ============================================================================================
+  WINDOWS — added 2026-07-31 (4th pass) on an explicit instruction, and it needs its reasoning
+  written down because it goes against a standing rule.
+
+  THE RULE IT DEPARTS FROM: 01_strategist_messaging.md §6-C bans "Windows 언급 일체" — any mention
+  at all — and claim-verdicts.md carried that forward as a REJECT (its 2026-07-31 additions, first
+  row). Both bans exist for one reason: package.json's `build` block has `mac` only, with zero hits
+  for win/nsis/appx/msi (package.json:190-233), so a present-tense sentence about Windows is false.
+
+  WHY "COMING SOON" IS NOT THAT SENTENCE: the banned claim is that Windows works. This says the
+  opposite — that you cannot get it. A disabled button labelled "coming soon" makes no present-tense
+  assertion, and the note underneath says outright that no build exists.
+
+  WHAT MUST NOT FOLLOW FROM THIS:
+    ❌ "Windows is supported" / "works on Windows" / "available for Windows" — the REJECT stands
+    ❌ Windows in the platform line above ("HighMemo runs on iPhone, Android and Mac") — unchanged
+       on purpose, and it is still true
+    ❌ Windows in the store listings. docs/store-listing/ was not touched
+    ❌ a Windows section in the Mac guide, or a fourth guide — instructions for software that has
+       no build would be instructions for nothing
+    ❌ architectures (arm64/x64). Mac names them because two Mac builds genuinely exist; naming
+       them for Windows would invent detail about a build that does not
+
+  NOTE FOR THE VERIFICATION PASS: the previous passes ran a forbidden-string check that failed the
+  page on any occurrence of "Windows" (05_site_report.md §26). That check now has to allow this
+  section — and only this section. Do not delete the word to make the old check pass.
+  ============================================================================================
+-->
+<h3>Windows</h3>
+
+<div class="btn-row">
+  <button class="btn" type="button" disabled aria-describedby="win-note">Windows (coming soon)</button>
+</div>
+<p id="win-note" class="sub">There is no Windows build to hand out yet — this button is disabled because the file does not exist, not because a finished download is being held back. When there is a Windows build, it will appear here.</p>
+
+<h2 id="before">Before you install <a class="anchor" href="#before" aria-label="Link to this section">#</a></h2>
+
+<ul>
+  <li><strong>HighMemo shows ads.</strong> There is no paid or ad-free version. Ads appear in the memo list on iPhone and Android; the Mac app has none.</li>
+  <li>On first launch HighMemo asks whether to download a small on-device search model (about 330&nbsp;MB). The app works fully without it, and the <span class="path">Settings → Local AI</span> download button is there if you want it later.</li>
+  <li>Connecting Google for sync asks for app-data folder access and read-only calendar access together.</li>
+  <li>Location access is requested only when a memo actually has a location reminder.</li>
+  <li>The interface is in English. AI output follows the language of your memo, or a language you pick in Settings.</li>
+</ul>
+
+<p>Most memo apps decide where your memos live and which AI reads them. HighMemo makes both of those your choice — and works before you choose either.</p>
+
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <div>HighMemo · Made by HighGarden · <a href="mailto:highgarden0@gmail.com">highgarden0@gmail.com</a></div>
+    <div class="site-foot-links">
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms of Service</a>
+      <a href="./guide-ios.html">iPhone guide</a>
+      <a href="./guide-android.html">Android guide</a>
+      <a href="./guide-desktop.html">Mac guide</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HighMemo for Mac — user guide</title>
+<meta name="description" content="Every HighMemo feature on Mac: where it lives, how to use it, what it needs connected, and the three things the Mac app deliberately does not do." />
+<meta name="robots" content="index,follow" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="./img/highmemo-mark.svg" />
+<link rel="stylesheet" href="./site.css" />
+<!--
+  Reference manual for the Electron build. Facts that must not be copied from the mobile guides:
+    - Scheduled reminders NEVER fire here. Only immediate "memo/document ready" notifications do.
+      Location reminders are approximated while the app is open.
+    - No ads, no dictation, no home-screen widgets, no downloadable on-device chat models.
+    - Local AI means an Ollama install the USER sets up. The app pulls nothing on its own.
+    - There is no first-launch prompt for the search model on Mac (the dialog it uses is a no-op in
+      this runtime), so this page must not claim one. Tracked as a defect in 05_site_report.md.
+    - SCREENSHOTS, since 2026-07-31: THREE Mac captures (sections 3, 4 and 9), from an ISOLATED
+      Electron profile with 12 demonstration memos — not from the developer's own install, which
+      holds 155 real memos and was never read (04_visual_manifest.md §14-1, §14-5). That constraint
+      has not been relaxed; it was routed around with `--user-data-dir`. Do not substitute iPhone
+      captures for a Mac screen, and do not re-shoot against the real profile.
+      They are 1440x960 LANDSCAPE and use `figure.shot.wide`. The phone layouts (`.shot-grid`,
+      `.pair`) size their columns for a 405x880 frame and would render a Mac window at 320px, where
+      nothing in it is legible. Each has a dark partner behind a <source>; the graph one NEEDS it,
+      because in the light capture the lines are nearly invisible (§14-4).
+      Nothing in these frames may be attributed to AI: the profile had no provider connected, so the
+      titles were typed and the summaries and tags are rule-engine output (§14-3).
+    - The desktop graph draws the user's own MANUAL links as lines, and section 9 now says so
+      because there is finally a capture of it. It may only be said with BOTH conditions attached:
+      only links the user made (GraphCanvas.web.tsx:870 skips every other edge type) and no lines at
+      all on the phones (a deliberate performance decision, confirmed by the user 2026-07-31).
+      Without both, this becomes the "your memos link themselves" claim, which is rejected on every
+      surface.
+-->
+</head>
+<body>
+
+<header class="site-head">
+  <div class="site-head-in">
+    <a class="brand" href="./index.html">
+      <img src="./img/highmemo-mark.svg" alt="" width="26" height="26" />
+      HighMemo
+    </a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="./index.html#features">Features</a>
+      <a href="./guide-desktop.html" aria-current="page">User guides</a>
+      <a href="./index.html#download">Download</a>
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<h1>HighMemo for Mac</h1>
+<p class="lede">Every feature, where to find it, and what it needs before it works — including the four things the Mac app deliberately does not do.</p>
+
+<nav class="guide-switch" aria-label="Choose a platform">
+  <a href="./guide-ios.html">iPhone &amp; iPad</a>
+  <a href="./guide-android.html">Android</a>
+  <a href="./guide-desktop.html" aria-current="page">Mac</a>
+</nav>
+
+<section class="guide-current" aria-labelledby="desktop-current-title">
+  <div>
+    <p class="eyebrow">Current interface</p>
+    <h2 id="desktop-current-title">HighMemo on Mac, today</h2>
+    <p>Use the graph, memo detail and searchable list together, then switch to Presentation View when one memo deserves your full attention. Choose Dark, Light or System in Appearance to carry the same workspace into your preferred theme.</p>
+  </div>
+  <div class="guide-current-desktop">
+    <figure class="shot wide">
+      <img src="./img/desktop-2026-08-main-light.jpg" width="2880" height="1920" loading="lazy" alt="HighMemo's current Mac workspace with graph, memo detail and memo list visible together." />
+      <figcaption>Browse across the library without losing the memo you are reading.</figcaption>
+    </figure>
+    <figure class="shot wide">
+      <img src="./img/desktop-2026-08-presentation-light.jpg" width="4112" height="2580" loading="lazy" alt="HighMemo's current Mac Presentation View showing a focused reading layout." />
+      <figcaption>Presentation View gives a saved memo room to breathe.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="note">
+  <span class="note-title">The Mac download is available</span>
+  <p>HighMemo 1.1.0 for Apple Silicon and Intel Macs is available from <a href="./index.html#download">the download section</a>.</p>
+</div>
+
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#start">Before you start</a></li>
+    <li><a href="#install">Installing and first opening</a></li>
+    <li><a href="#layout">The window</a></li>
+    <li><a href="#write">Writing a memo</a></li>
+    <li><a href="#getting-in">Getting things in</a></li>
+    <li><a href="#list">The memo list, search and filters</a></li>
+    <li><a href="#detail">Opening a memo</a></li>
+    <li><a href="#organize">Tags, folders, pinning and people</a></li>
+    <li><a href="#graph">The graph view</a></li>
+    <li><a href="#documents">Documents</a></li>
+    <li><a href="#assistant">AI Assistant</a></li>
+    <li><a href="#reminders">Reminders on Mac — read this one</a></li>
+    <li><a href="#calendar">Calendar</a></li>
+    <li><a href="#ai">Setting up AI, including Ollama</a></li>
+    <li><a href="#search-model">The on-device search model</a></li>
+    <li><a href="#sync">Sync with your Google Drive</a></li>
+    <li><a href="#settings">Settings reference</a></li>
+    <li><a href="#data">Export, import and reset</a></li>
+    <li><a href="#updates">Updates</a></li>
+    <li><a href="#differences">What Mac does not do</a></li>
+    <li><a href="#trouble">Troubleshooting</a></li>
+  </ol>
+</div>
+
+<h2 id="start">1. Before you start <a class="anchor" href="#start" aria-label="Link to this section">#</a></h2>
+
+<p>There is no sign-up, no onboarding and no API key to paste. Open HighMemo and start typing. Nothing is connected on a fresh install, and your memos are kept in the app's own storage on your Mac.</p>
+
+<h3>What works with nothing connected</h3>
+<ul>
+  <li>Writing, editing and deleting memos, in a live Markdown editor</li>
+  <li>Attaching images and files, including by pasting or dragging them in</li>
+  <li>Tags, folders, pinning</li>
+  <li>Searching and filtering</li>
+  <li>The graph view</li>
+  <li>Reading the text inside images</li>
+  <li>Export and import</li>
+</ul>
+
+<h3>What needs something connected first</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Feature</th><th>What it needs</th></tr></thead>
+  <tbody>
+    <tr><td>Titles, summaries, tags and categories written for you</td><td>An AI provider — a cloud key you own, or Ollama running on your Mac</td></tr>
+    <tr><td>AI Assistant</td><td>The same</td></tr>
+    <tr><td>Documents built from several memos</td><td>The same</td></tr>
+    <tr><td>Meaning-based search, and the <strong>Recommend</strong> list</td><td>The on-device search model — <a href="#search-model">section 15</a></td></tr>
+    <tr><td>The same memos on your phone</td><td>A Google account, connected in Settings</td></tr>
+    <tr><td>Your schedule beside your memos</td><td>Google Calendar, connected in Settings</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note">
+  <span class="note-title">The Mac app has no ads</span>
+  <p>HighMemo shows ads on iPhone and Android. It does not on Mac. There is still no paid version — the Mac app simply has none.</p>
+</div>
+
+<h3>Language</h3>
+<p>HighMemo's interface is in English only. What language the <em>AI</em> writes in is a separate setting — <span class="path">Settings → Display → AI Language</span>.</p>
+
+<h2 id="install">2. Installing and first opening <a class="anchor" href="#install" aria-label="Link to this section">#</a></h2>
+
+<p>HighMemo for Mac comes as a disk image from <a href="./index.html#download">this site</a>, in two builds: one for <strong>Apple Silicon</strong> Macs (M1 and later) and one for <strong>Intel</strong> Macs. If you are unsure which you have, look at <span class="path">Apple menu → About This Mac</span>. Open the disk image and drag HighMemo to your Applications folder.</p>
+
+<p>Because HighMemo is distributed from this page rather than the Mac App Store, macOS checks it the first time you open it, which can take a moment longer than usual. If macOS refuses to open it, go to <span class="path">System Settings → Privacy &amp; Security</span>, scroll down to the message about HighMemo, and choose <strong>Open Anyway</strong>. You only ever have to do that once.</p>
+
+<h2 id="layout">3. The window <a class="anchor" href="#layout" aria-label="Link to this section">#</a></h2>
+
+<!--
+  Caption D1, 04_visual_manifest.md §14-4. It describes the layout and claims no feature — the demo
+  profile had no AI provider, so nothing in this frame may be attributed to AI (§14-3).
+  The draft read "the whole canvas" and claim-verdicts.md §9-B returned CONDITIONAL on exactly those
+  two words: the canvas continues below the panels, and all twelve dots being visible is a property
+  of a twelve-memo demo, not of the app. `the whole` was removed. Do not restore it, and do not write
+  any variant that implies every memo is on screen at once.
+-->
+<figure class="shot wide">
+  <img src="./img/desktop-2026-08-main-light.jpg" width="2880" height="1920" loading="lazy"
+       alt="The current HighMemo Mac workspace with graph, memo detail and memo list on screen together." />
+  <figcaption>On the Mac the list, the memo you are reading and the canvas are on screen at once.</figcaption>
+</figure>
+
+<p>The Mac window is three columns rather than a stack of sheets:</p>
+<ul>
+  <li><strong>Left</strong> — the graph of your memos.</li>
+  <li><strong>Middle</strong> — whatever you are writing.</li>
+  <li><strong>Right</strong> — the memo list, the calendar, notifications or Settings, whichever you last opened.</li>
+</ul>
+<p>The hairlines between the columns are draggable, so you can give the editor or the list more room. On a narrow window the columns collapse and panels slide over the graph instead, the way they do on a phone.</p>
+
+<h3>The toolbar</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Button</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td>Pencil-in-square</td><td>New memo. Opens the editor in the middle column.</td></tr>
+    <tr><td>Sparkle</td><td>AI Assistant. With no AI set up it takes you to Settings instead.</td></tr>
+    <tr><td>List</td><td>The memo list on the right.</td></tr>
+    <tr><td>Calendar</td><td>The calendar on the right.</td></tr>
+    <tr><td>Map pin</td><td><strong>Location Reminders</strong> — every memo with a place, on one map.</td></tr>
+    <tr><td>Bell, with a badge</td><td>The notification list.</td></tr>
+    <tr><td>Circular arrows</td><td>Sync now. Appears only once Google Drive sync is set up.</td></tr>
+    <tr><td>Gear</td><td>Settings.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Clicking the HighMemo name at the top left clears whatever you had open. The count beside it is how many memos you have.</p>
+
+<h2 id="write">4. Writing a memo <a class="anchor" href="#write" aria-label="Link to this section">#</a></h2>
+
+<p>The Mac editor is the reason to use HighMemo on a Mac.</p>
+
+<div class="note">
+  <span class="note-title">On Mac the editor renders Markdown as you type</span>
+  <p>There is no edit-then-preview step and no split view. You type <code>## Heading</code> and it becomes a heading; the <code>##</code> reappears only while your cursor is on that line, so you can correct it. Checkboxes are real checkboxes you can click. Images show inline.</p>
+</div>
+
+<!--
+  Caption D2, 04_visual_manifest.md §14-4 — **PASS** (claim-verdicts.md §9-B). "Mac only" is the
+  condition on verdict N-6: the live editor is the `Platform.OS === 'web'` branch (App.tsx:7741 →
+  :7747) and the native sibling is a placeholder (MarkdownWysiwyg.tsx:1-8). The verdict says outright
+  that an edit removing "Mac only" must not be approved. Keep the words even here, where the whole
+  page is about the Mac — this sentence gets copied to other surfaces, and without them it becomes a
+  promise about the phones.
+  The frame was shot with the caret in a line that has no markup in it, which is why every other
+  line is showing its rendered form.
+-->
+<figure class="shot wide">
+  <img src="./img/desktop-2026-08-main-light.jpg" width="2880" height="1920" loading="lazy"
+       alt="The current HighMemo Mac workspace with an open memo in the central detail pane." />
+  <figcaption>On the Mac, markdown renders as you type — headings, checkboxes and code in the pane you are typing in. <strong>Mac only.</strong></figcaption>
+</figure>
+
+<p>A title field sits above the body. Click <strong>Save</strong>, or press <kbd>⌘</kbd><kbd>Return</kbd>. Saving does not wait for anything: the memo is stored the moment you save it, and any AI work happens afterwards in the background. If that work fails, nothing you already wrote is changed.</p>
+
+<h3>Formatting</h3>
+<p>A row of buttons above the editor covers bold, italic, strikethrough, inline code, three heading levels, bullet and numbered lists, task lists, quotes, code blocks, a divider, today's date, links and images. Or use the keyboard:</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Keys</th><th>Does</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>⌘</kbd><kbd>B</kbd></td><td>Bold</td></tr>
+    <tr><td><kbd>⌘</kbd><kbd>I</kbd></td><td>Italic</td></tr>
+    <tr><td><kbd>⌘</kbd><kbd>K</kbd></td><td>Link</td></tr>
+    <tr><td><kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd></td><td>Code block</td></tr>
+    <tr><td><kbd>⌘</kbd><kbd>Return</kbd></td><td>Save</td></tr>
+    <tr><td><kbd>Return</kbd> in a list</td><td>Continues the list. An empty item ends it.</td></tr>
+    <tr><td><kbd>Tab</kbd> inside a code block</td><td>Indents</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>Closes the open memo</td></tr>
+    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Steps through your memos while one is open</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Pasting and dragging</h3>
+<ul>
+  <li><strong>Paste an image</strong> and it becomes an attachment, with a reference inserted where your cursor was.</li>
+  <li><strong>Drag files onto the window</strong> and the editor opens by itself with them attached. An overlay reads <em>Drop files here</em>.</li>
+  <li><strong>Drag a calendar event</strong> from the calendar panel into the editor and it becomes a mention of that event.</li>
+  <li><strong>Paste a link</strong> as plain text and it is recognised as a link when you save; HighMemo then fetches the page. This is how you bring web pages in on a Mac — there is no share menu.</li>
+</ul>
+
+<h3>Attachments and text inside images</h3>
+<p>Attachments appear as thumbnails; click one to insert an inline reference, or its <strong>×</strong> to remove it. Text <em>inside</em> an image is read using macOS's own text recognition and becomes material for the memo's tags and summary. The recognition itself happens on your Mac; what it finds is then material like any other, so it goes to whichever AI provider you connected in <a href="#ai">section 14</a>.</p>
+
+<h3>Mentioning another memo or a person</h3>
+<p>Type <code>@</code> and suggestions appear: people, your memos, and — if the calendar is connected — your events. Pick one and it becomes a link inside the text.</p>
+
+<!--
+  This paragraph used to promise "deleting the mention does not delete the link" for people, memos
+  and events together. That is only true of memos. 04_visual_manifest.md §1 note 12 rejected exactly
+  that conflation: memo mentions are add-only, people mentions are reconciled against the body.
+  Keep the two in separate sentences here as on the mobile guides.
+-->
+<p>For a <strong>memo</strong> you mention, the link is add-only: <strong>deleting the mention from the text does not delete the link</strong>, and no automatic rebuild ever removes it. A <strong>person</strong> works the other way round — there the text is the record, so removing <code>@name</code> from the body removes that person's link to the memo.</p>
+
+<h3>Drafts</h3>
+<p>An unfinished new memo is kept: after a few seconds without typing, <em>Draft saved</em> appears. The amber clock icon brings it back later.</p>
+
+<h2 id="getting-in">5. Getting things in <a class="anchor" href="#getting-in" aria-label="Link to this section">#</a></h2>
+
+<p>Mac has no system share sheet into HighMemo, so the routes in are:</p>
+<ul>
+  <li><strong>Paste a link</strong> into a new memo. HighMemo fetches the page and fills in its title, its description as the summary, and its preview image as a thumbnail. Pages that publish none of that still become a memo, with a title taken from the page's own content and no thumbnail.</li>
+  <li><strong>Drag files</strong> onto the window.</li>
+  <li><strong>Paste images</strong> straight into the editor.</li>
+  <li><strong>Sync</strong> — anything you shared into HighMemo on your phone appears here once sync has run.</li>
+</ul>
+<p>On a Mac, HighMemo fetches pages itself rather than through the browser's restrictions, so pages that resist being read elsewhere often work here.</p>
+
+<h3>Pages whose content is inside pictures</h3>
+
+<!--
+  APPROVED WORDING — do not reword. "The pictures themselves are not kept" was rejected here, as it
+  was on the iPhone guide: absolutes ("always deleted", "never remains", "nothing is left behind")
+  are out because the app can be killed mid-read on the phones. Mac gets the STRONGER last sentence
+  instead of the sweep sentence, and only Mac may have it: on the desktop shell the bytes arrive as
+  a data url and no file is ever written — src/services/content-processor/linkImageText.ts,
+  materialize(), the Platform.OS === 'web' branch, whose dispose() is a no-op for that reason.
+-->
+<p>On iPhone and Mac, HighMemo reads the text in a link's images using the system text recognition, and uses it to write the tags, title and summary. Those images are never added to your memo and never uploaded. On Mac the image is never written to disk at all — it is read straight into memory and handed to the text recogniser.</p>
+
+<p>The recognised text is not stored either. What stays on the memo is what was written from it — the tags, the title and the summary — and if you have turned sync on, those travel to your Drive with the rest of the memo.</p>
+
+<p>This is not the same on every platform:</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Text inside a link's pictures</th><th></th><th>How</th></tr></thead>
+  <tbody>
+    <tr><td>Mac</td><td><span class="plat on">read</span></td><td>macOS's own text recognition. Nothing to set up.</td></tr>
+    <tr><td>iPhone and iPad</td><td><span class="plat on">read</span></td><td>iOS's own text recognition. Nothing to set up.</td></tr>
+    <tr><td>Android</td><td><span class="plat off">not read</span></td><td>HighMemo has no text-recognition engine on Android — see <a href="./guide-android.html#write">the Android guide, section 3</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="list">6. The memo list, search and filters <a class="anchor" href="#list" aria-label="Link to this section">#</a></h2>
+
+<h3>Search</h3>
+<p>The field's placeholder is its syntax: <span class="path">keyword, #tag, @person</span>.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>You type</th><th>You get</th></tr></thead>
+  <tbody>
+    <tr><td>Plain words</td><td>Memos whose title, body or tags contain what you typed, anywhere inside them. Case does not matter.</td></tr>
+    <tr><td><code>#tag</code></td><td>Only memos carrying exactly that tag.</td></tr>
+    <tr><td><code>@name</code></td><td>Only memos linked to exactly that person.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Every memo is searched. Once the on-device search model is ready, meaning-based matches are <em>added</em> to these results — nothing is taken away. Meaning-based matching applies to plain words only, not to <code>#tag</code> or <code>@name</code>.</p>
+
+<h3>Chips, filters and sorting</h3>
+<p><strong>All</strong>, <strong>Pinned</strong>, <strong>Memos</strong>, <strong>Links</strong>, <strong>Documents</strong> and <strong>Reminders</strong>, each with a live count, then chips for the tags you use most. <strong>Filter</strong> opens <strong>Folders</strong>, <strong>Collections</strong> (your shortlist of tags — long-press or right-click a tag to pin it there) and <strong>People</strong>. Results update as you click; there is no Apply button. Sorting offers <strong>Pinned First</strong>, <strong>Newest</strong> and <strong>Updated</strong>.</p>
+
+<h3>Selecting several memos</h3>
+<p><strong>Select</strong>, tick memos, then <strong>Delete</strong> or <strong>Create Document</strong> (<a href="#documents">section 10</a>).</p>
+
+<h2 id="detail">7. Opening a memo <a class="anchor" href="#detail" aria-label="Link to this section">#</a></h2>
+
+<p>Click a memo in the list or on the graph. The arrow keys step through your memos; <kbd>Esc</kbd> closes.</p>
+
+<h3>The action row</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Icon</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td>Wand (purple)</td><td>Runs the AI over this memo again. Needs an AI provider. If it fails, your existing title, summary and tags are kept.</td></tr>
+    <tr><td>Map pin</td><td>Attaches or changes a place — but see <a href="#reminders">section 12</a> before relying on it.</td></tr>
+    <tr><td>Clock (amber)</td><td>Attaches or changes a time reminder — likewise.</td></tr>
+    <tr><td>Pencil</td><td>Edits the memo.</td></tr>
+    <tr><td>Share</td><td>Copies the memo — title, body, tags and link — to the clipboard.</td></tr>
+    <tr><td>Trash (red)</td><td>Deletes the memo, after confirming.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>The sections down the page</h3>
+<ul>
+  <li><strong>Folder chip</strong>, <strong>reminder chip</strong>, and any <strong>linked calendar events</strong>.</li>
+  <li><strong>Summary</strong> — written by the AI. Absent until an AI provider has processed the memo.</li>
+  <li><strong>The body</strong> — rendered Markdown. Click a checkbox to tick it. Clicking a link follows it; a single click elsewhere opens the editor.</li>
+  <li><strong>Attachments</strong> — click an image to open it full screen, with arrows and trackpad gestures to move and zoom, and a <strong>Download</strong> button. Files can be opened in their usual app.</li>
+  <li><strong>Created / Updated</strong>.</li>
+  <li><strong>Tags</strong> — click a chip to see everything carrying it, or <strong>Add</strong> one.</li>
+  <li><strong>Related</strong> — the memos <em>you</em> linked, including anything you brought in with <code>@</code>. On a document this is <strong>Sources</strong>: the memos the AI reads when it writes it.</li>
+  <li><strong>Recommend</strong> — memos that look similar, from the on-device search model. Empty until that model is ready. Suggestions, not links.</li>
+  <li><strong>Auto-collect related memos</strong> — on a document only.</li>
+</ul>
+
+<h3>AI actions on one memo</h3>
+<p>The small circular button at the end of the title row opens <strong>Ask AI</strong>, <strong>Enhance</strong>, <strong>Summarize</strong>, <strong>Translate</strong> and <strong>Action items</strong>. Each needs an AI provider.</p>
+
+<h2 id="organize">8. Tags, folders, pinning and people <a class="anchor" href="#organize" aria-label="Link to this section">#</a></h2>
+
+<p>All four work with no account and no AI.</p>
+
+<p>Tags arrive two ways: the AI adds them when it processes a memo, and you add them yourself with <strong>Add</strong> in the detail view. A tag is identified by its name, so a hand-typed tag and an AI tag with the same word are the same tag. Bulk cleanup is in <span class="path">Settings → Data &amp; Storage → Tag Manager</span>.</p>
+
+<p>Folders are created in the <strong>Filter</strong> panel or from a memo's folder chip. A memo lives in one folder at a time, and folders do not nest. <strong>Collections</strong> is your pinned shortlist of tags. <strong>People</strong> come from <code>@</code> mentions and are their own filter axis.</p>
+
+<div class="note">
+  <span class="note-title">Better tags without any AI, on Mac only</span>
+  <p>With no AI provider configured, HighMemo falls back to picking words out of your text itself. On Mac it does that with proper word analysis for Korean, Japanese, Chinese and several European languages, which the mobile apps cannot carry. So a Mac with no AI at all still produces reasonable tags.</p>
+</div>
+
+<h2 id="graph">9. The graph view <a class="anchor" href="#graph" aria-label="Link to this section">#</a></h2>
+
+<p>Each dot is a memo. <strong>Memos that share a tag gather together, and the tag's name sits at the centre of the group.</strong> That grouping needs no AI, no account and no model — tags are enough. Memos that share no tag with anything collect under <em>Uncategorized</em>.</p>
+
+<!--
+  THE ONE CLAIM ON THIS SITE THAT MAY MENTION LINES, and it may only be made here, with both of its
+  conditions in the same breath:
+    (a) only the user's own links are drawn — GraphCanvas.web.tsx:870 skips every edge whose type is
+        not MANUAL, so nothing the app inferred (AUTO, SEMANTIC_SIMILAR, TAG_LINK) becomes a line;
+    (b) the phones draw no lines at all — a deliberate performance decision, not an oversight
+        (CLAUDE.md states it as a rule that must not be changed; the user confirmed it 2026-07-31).
+  Drop either half and this turns into "your memos link themselves", which is rejected everywhere.
+  It stayed off the site entirely until there was a capture of it, which arrived 2026-07-31.
+-->
+<p>Lines are drawn between memos as well, and only where <strong>you</strong> made the link yourself — with <strong>Related</strong>, or by mentioning one memo inside another using <code>@</code>. Nothing HighMemo worked out on its own is drawn as a line. On iPhone and Android no lines are drawn at all: on a phone-sized canvas that is a deliberate trade for speed, so the graph there shows the tag groups instead.</p>
+
+<!--
+  Caption D3, 04_visual_manifest.md §14-4. claim-verdicts.md §9-B returned CONDITIONAL with two
+  conditions, and both are met here:
+    1. the sentence now OPENS WITH "On the Mac," — the draft had no platform in it, and the phones
+       draw no lines at all, so an unscoped version is false there;
+    2. it is paired with the dark capture, because in the light one the lines are pale grey on a pale
+       background and a reader can fail to find what the caption is talking about.
+  DO NOT DELETE "the only lines" either — without those words the sentence reads as automatic
+  linking, which is rejected on every surface.
+-->
+<figure class="shot wide">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./img/desktop-dark-03_graph.jpg" />
+    <img src="./img/desktop-03_graph.jpg" width="1440" height="960" loading="lazy"
+         alt="The graph filling the Mac window: twelve coloured dots, each labelled with the start of its memo title, and two thin lines running from the On-call handover dot to two other memos. An overview map sits at the bottom left, zoom and tag-group buttons at the bottom right, and a New Memo button at the bottom centre." />
+  </picture>
+  <figcaption>On the Mac, every memo on one canvas. <strong>The only lines are the links you made yourself.</strong></figcaption>
+</figure>
+
+<p>To see what a particular memo is connected to, open it and read <strong>Related</strong> (the links you made) and <strong>Recommend</strong> (similar memos).</p>
+
+<h3>Controls</h3>
+<ul>
+  <li>Drag to move. Scroll or pinch on the trackpad to zoom.</li>
+  <li><strong>+</strong> and <strong>−</strong> buttons zoom; the <strong>#</strong> button switches between tag groups and individual memos.</li>
+  <li>Click a dot to open that memo. Click a tag name to filter to it — a pill appears showing the tag, with an <strong>×</strong> to clear it.</li>
+</ul>
+
+<h3>What you see as you zoom</h3>
+<p>Zoomed out you see tag names, not memos — the busiest groups first, then more as you zoom in. Past a certain point the tag names give way to the memos themselves, then to their titles, then to their thumbnails. Exactly one of the two is on screen at a time.</p>
+
+<p>Dot colour follows the memo's category. A dashed pulsing ring means the AI has not finished with it yet.</p>
+
+<h2 id="documents">10. Documents <a class="anchor" href="#documents" aria-label="Link to this section">#</a></h2>
+
+<p>A document is a memo written <em>from</em> other memos.</p>
+
+<ol>
+  <li>Open the memo list and click <strong>Select</strong>.</li>
+  <li>Tick the memos you want to draw from.</li>
+  <li>Click <strong>Create Document</strong>.</li>
+  <li>Answer <em>What kind of document should these memos become?</em> — for instance <em>Weekly summary</em> or <em>Meeting notes</em> — and click <strong>Create</strong>.</li>
+</ol>
+
+<p>What you type decides the shape of the result, not just its title: ask for a weekly report and you get one organised by date; ask for a comparison and you get a table. The document is saved immediately and filled in behind you — <em>Drafting document…</em> then <em>Document is ready!</em>, which also arrives as a macOS notification so you can go and do something else.</p>
+
+<p><strong>+</strong> beside <strong>Sources</strong> adds more memos later and rewrites the document with them; if you have edited it by hand, HighMemo warns you first. <strong>Auto-collect related memos</strong> makes the document offer to take in related memos as you write them.</p>
+
+<p>With no AI provider you can still make one: your chosen memos gathered under headings, a tidy collection rather than a piece of writing.</p>
+
+<h2 id="assistant">11. AI Assistant <a class="anchor" href="#assistant" aria-label="Link to this section">#</a></h2>
+
+<p>The sparkle in the toolbar. It answers from your own memos and needs an AI provider — with <strong>Text Rules Only</strong> selected, clicking it takes you to Settings.</p>
+
+<p>Type into <span class="path">Ask about your memos…</span>, or use a preset. They change depending on whether a memo is in context:</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>With no memo in context</th><th>With a memo in context</th></tr></thead>
+  <tbody>
+    <tr><td><strong>For today</strong></td><td><strong>About this memo</strong></td></tr>
+    <tr><td><strong>Recent trends</strong> — the last two weeks</td><td><strong>Find related</strong></td></tr>
+    <tr><td><strong>Knowledge gaps</strong> — the last month</td><td><strong>Enhance</strong></td></tr>
+    <tr><td><strong>Weekly summary</strong> — the last seven days</td><td><strong>Action items</strong></td></tr>
+    <tr><td><strong>Random connection</strong> — three memos at random</td><td></td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Memos the answer drew on appear as chips you can click to open, and tags as chips that filter the list. Under each answer: <strong>Copy</strong>, <strong>Save as Memo</strong>, <strong>Append to memo</strong> (checklists arrive as real checkboxes) and <strong>Translate</strong>. While an answer is streaming, the send button becomes a stop button.</p>
+
+<p>The panel carries the line <em>AI can make mistakes. Double-check important info.</em></p>
+
+<p>If Google Calendar is connected, the titles of today's and tomorrow's events are included in what the assistant is told. That means those titles go to whichever AI provider you configured.</p>
+
+<h2 id="reminders">12. Reminders on Mac — read this one <a class="anchor" href="#reminders" aria-label="Link to this section">#</a></h2>
+
+<div class="warn">
+  <span class="warn-title">A reminder set on your Mac does not alert you on your Mac</span>
+  <p>Reminder notifications are delivered on <strong>iPhone and Android</strong>. The Mac app can store a reminder on a memo, show it in the calendar, and list it under <strong>Reminders</strong> — but it does not schedule it with macOS, so nothing pops up when the time comes. If you use HighMemo on a phone as well and have sync on, the same reminder <em>does</em> alert you there. If Mac is your only device, treat reminders as dated memos rather than as alarms.</p>
+</div>
+
+<h3>What the Mac app does do</h3>
+<ul>
+  <li><strong>Sets and shows reminders.</strong> Open a memo, click the clock icon, and choose <strong>In 1 hour</strong>, <strong>In 3 hours</strong>, <strong>Tomorrow morning</strong>, <strong>Next Monday</strong>, <strong>Custom…</strong> (a date and time picker), or <strong>Repeat</strong> with <strong>No repeat</strong>, <strong>Daily</strong>, <strong>Weekly</strong> or <strong>Monthly</strong>. <strong>Clear reminder</strong> removes it.</li>
+  <li><strong>Lists them.</strong> The calendar shows them on their day and the bell lists what is due, so a glance still tells you what is coming.</li>
+  <li><strong>Tells you when work finishes.</strong> The Mac app does post macOS notifications for things that just happened — a memo finished being organised, a document finished being written. Clicking one brings the window forward. macOS asks permission the first time.</li>
+</ul>
+
+<h3>Location reminders on Mac</h3>
+<p>You can attach a place to a memo — click the map pin, search or click the map, set a radius. But arrival is only noticed <strong>while HighMemo is open</strong>, and it is checked periodically rather than the instant you cross the line, because a Mac app cannot ask macOS to watch a place in the background the way a phone can. On a laptop that travels with you it will sometimes work; do not depend on it. The <strong>map pin</strong> in the toolbar shows all your placed memos on one map, which is the more useful half of the feature here.</p>
+
+<h2 id="calendar">13. Calendar <a class="anchor" href="#calendar" aria-label="Link to this section">#</a></h2>
+
+<p>The calendar icon opens a month grid on the right. Days with something on them carry a dot; click a day to see it below. <strong>Today</strong> jumps back. Your own reminders show here whether or not you connect anything.</p>
+
+<h3>Connecting Google Calendar</h3>
+<p>Go to <span class="path">Settings → Sync &amp; Services</span>, connect Google (see <a href="#sync">section 16</a>), then use <strong>Connect Calendar</strong>. Your calendars appear grouped by account, each with a checkbox. <strong>Add Calendar Account</strong> adds a second Google account for calendar only.</p>
+
+<p><strong>Access is read-only.</strong> HighMemo never creates, edits or deletes an event. Events cover about <strong>a month back and three months ahead</strong>, refresh roughly every 30 minutes while the app is open, and <strong>Sync Now</strong> forces it.</p>
+
+<div class="note">
+  <span class="note-title">A month outside that window looks empty</span>
+  <p>Moving between months is not stopped at the edges of the fetched window, so you can page into months HighMemo has not asked Google about. Those months show nothing, which looks the same as a month with nothing in it. If a month more than three ahead, or more than one behind, comes up blank, that is the window rather than your calendar. Your own memo reminders are stored on this Mac and show in any month.</p>
+</div>
+
+<p class="sub">There is also a ceiling of 2,500 events per fetch. Inside a four-month window you are unlikely ever to meet it.</p>
+
+<h3>Events and memos together</h3>
+<ul>
+  <li><strong>Add memo</strong>, under an event, starts a memo already attached to it. You do not have to expand the row first — the button is there on every Google event.</li>
+  <li><strong>Drag an event into the editor</strong> to mention it in what you are writing. This is a Mac-only shortcut.</li>
+  <li>When you save a memo, HighMemo <em>suggests</em> an event that looks related, with a <strong>Link</strong> button. Nothing is linked unless you click it.</li>
+</ul>
+
+<h2 id="ai">14. Setting up AI, including Ollama <a class="anchor" href="#ai" aria-label="Link to this section">#</a></h2>
+
+<p>Two routes on Mac, and you can also take none.</p>
+
+<h3>Route 1 — a cloud provider, with your own key</h3>
+<p><span class="path">Settings → Cloud AI Providers</span>, click a provider, paste the API key of an account you already have. <strong>Get API key →</strong> opens the right page if you do not have one. Saving a key selects that provider and its default model; <strong>Change</strong> under MODEL picks another.</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Provider</th><th>Default model</th></tr></thead>
+  <tbody>
+    <tr><td>Groq (Free)</td><td>Llama 3.1 8B Instant</td></tr>
+    <tr><td>Google Gemini</td><td>Gemini 2.5 Flash Lite</td></tr>
+    <tr><td>OpenAI</td><td>GPT-5 nano</td></tr>
+    <tr><td>Anthropic Claude</td><td>Claude Haiku 4.5</td></tr>
+    <tr><td>Mistral</td><td>Mistral Small</td></tr>
+    <tr><td>Perplexity</td><td>Sonar</td></tr>
+    <tr><td>Alibaba Qwen</td><td>Qwen Plus</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Requests go from your Mac straight to the provider you chose, under your key. Your key is stored on your Mac and is not included in anything HighMemo syncs.</p>
+
+<h3>Route 2 — Ollama, running on your Mac</h3>
+
+<div class="warn">
+  <span class="warn-title">You install and run Ollama; HighMemo does not do it for you</span>
+  <p>The Mac app has no model list to download from — that exists only on phones. Instead it talks to <a href="https://ollama.com" rel="noopener noreferrer" target="_blank">Ollama</a>, which you set up yourself. Nothing works until you have.</p>
+</div>
+
+<ol>
+  <li><strong>Install Ollama</strong> from ollama.com and open it, so it is running and listening on your Mac's own address (port 11434). If you prefer the terminal, <code>ollama serve</code>.</li>
+  <li><strong>Pull a model</strong>, for example <code>ollama pull gemma3</code>. Until at least one model is present HighMemo has nothing to use, and will tell you so.</li>
+  <li>In HighMemo, open <span class="path">Settings → Local AI → Desktop CLI Tools</span>. Click <strong>Check Status</strong>. When the dot next to <strong>Ollama</strong> turns green, click <strong>Use</strong>.</li>
+</ol>
+
+<p>HighMemo then uses the first model Ollama is serving. There is no model picker on the HighMemo side — the choice is which models you pull and keep. With Ollama answering, your memo text is processed on your own Mac and does not leave it.</p>
+
+<p>The same panel also reports whether <strong>LM Studio</strong> and <strong>llama.cpp</strong> are listening, and whether the <strong>Claude Code</strong>, <strong>OpenAI Codex</strong>, <strong>Gemini CLI</strong> and <strong>Aider</strong> command-line tools are installed, with the command to install each one if not. It is a status board for what your Mac has available; the local engine HighMemo actually routes its own work through is Ollama.</p>
+
+<h3>Route 3 — no AI</h3>
+<p><span class="path">Settings → Local AI → Text Rules Only (no AI)</span>. Memos still get a title, a short summary and tags derived from their own text — on Mac, with the proper word analysis described in <a href="#organize">section 8</a>.</p>
+
+<h3>What the AI produces</h3>
+<p>Once a provider is connected, every memo you save comes back — a few seconds later, in the background — with a title, a summary, tags and a category. The category is what colours the memo's dot on the graph. If the AI fails, your existing title, summary and tags are kept rather than replaced, and a message tells you it failed.</p>
+
+<!-- APPROVED WORDING — do not reword, do not put the number back. See the same paragraph in guide-ios.html. -->
+<p>The AI is asked to pick a category. The value is stored as it comes back, and the graph has colours for 15 of them — anything else takes a default colour. That is why an occasional dot is grey while its neighbours are not. It is worth knowing here in particular: a small local model through Ollama is the most likely thing to answer with something off the list.</p>
+
+<p class="sub">The categories with no colour of their own are kids, camping, fashion, pet, art and other.</p>
+
+<h3>What language the AI writes in</h3>
+<p><span class="path">Settings → Display → AI Language</span>. <strong>Auto</strong> is the default and follows the memo. Fourteen languages can be chosen explicitly. This affects AI output only — the interface stays in English.</p>
+
+<h2 id="search-model">15. The on-device search model <a class="anchor" href="#search-model" aria-label="Link to this section">#</a></h2>
+
+<p>Separate from section 14, and much smaller. This model turns your memos into vectors so HighMemo can find things by meaning rather than by matching letters. It powers meaning-based search results and the <strong>Recommend</strong> list. It runs on your Mac whichever AI provider you use, and the vectors it produces are not sent anywhere.</p>
+
+<p>On Mac the model's files are fetched the first time they are needed and then kept, so the first meaning-based search after installing does a one-off download and later ones do not.</p>
+
+<h3>Checking on it, and controlling it</h3>
+<p><span class="path">Settings → Local AI → Semantic Search Model</span>. The <strong>Embedding Model</strong> row says which state it is in — <em>Ready — semantic search enabled</em>, <em>Downloading… n%</em>, or <em>Not downloaded — using keyword search</em> — with a <strong>Download</strong> button when it is missing.</p>
+
+<p>There is no on/off switch for meaning-based search. It works when the model is ready and does not when it is not; until then, search matches letters.</p>
+
+<h3>The semantic index</h3>
+<p><strong>Semantic Index</strong> below it reports how many memos have been indexed. It happens on its own once the model is ready, but <strong>Index <em>n</em></strong> or <strong>Build</strong> processes what is outstanding, <strong>Rebuild</strong> starts over, and <strong>Stop</strong> halts a run. These are greyed out until the model is ready. Because a Mac has power and a big screen, this is the natural place to run a full <strong>Rebuild</strong> for a large collection rather than doing it on a phone.</p>
+
+<h2 id="sync">16. Sync with your Google Drive <a class="anchor" href="#sync" aria-label="Link to this section">#</a></h2>
+
+<p>Connect a Google account and your Mac and phone see the same memos. They are stored in <strong>your own Google Drive app-data folder</strong> — a private per-app area of your Drive. There is no HighMemo server and no HighMemo account, so nobody at HighMemo can look at them. Images and attachments travel too.</p>
+
+<h3>Turning it on</h3>
+<ol>
+  <li><span class="path">Settings → Sync &amp; Services → Cloud Sync</span> and choose <strong>Google</strong>.</li>
+  <li>Click <strong>Connect Google</strong>. Your browser opens for the sign-in and hands the result back to HighMemo.</li>
+</ol>
+
+<div class="warn">
+  <span class="warn-title">One sign-in asks for two permissions</span>
+  <p>Connecting sync requests app-data folder access <strong>and</strong> read-only calendar access <em>in the same consent screen</em>. There is no way to grant only one. If you want sync but not the calendar, simply do not connect the calendar afterwards — HighMemo will not read your events until you do.</p>
+</div>
+
+<h3>When it runs</h3>
+<p>When you open the app, and every <strong>5 minutes</strong> while it is open. The toolbar's circular-arrows button and <strong>Sync Now</strong> in Settings both run it at once. There is no background sync while the app is closed, and no interval to configure.</p>
+
+<p>That 5-minute cycle exists only while Drive sync is actually set up and signed in. If it is not — no provider chosen, or the sign-in has expired — nothing is scheduled at all, rather than running slowly in the background. So a stale <strong>Last sync</strong> means "check that it is still connected", not "wait longer".</p>
+<p>Sync never pulls into an editor you have open, so it cannot overwrite what you are typing.</p>
+
+<h3>What happens when two devices disagree</h3>
+<p>The newer edit of a memo wins; you do not get a merge conflict to resolve. Nothing is deleted by syncing — a deletion travels only when you actually deleted something.</p>
+
+<h3>Turning it off, and deleting what was uploaded</h3>
+<p><strong>Disconnect</strong> stops all uploads and signs the account out. That does not delete the copy already in your Drive. To remove that, revoke HighMemo in your <a href="https://myaccount.google.com/permissions" rel="noopener noreferrer" target="_blank">Google Account permissions</a> — which deletes the app-data folder.</p>
+
+<h2 id="settings">17. Settings reference <a class="anchor" href="#settings" aria-label="Link to this section">#</a></h2>
+
+<p>The gear icon. On a wide window Settings docks into the right column rather than covering the app.</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Section</th><th>Contains</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Appearance</strong></td><td><strong>Dark</strong> / <strong>Light</strong> / <strong>System</strong></td></tr>
+    <tr><td><strong>Cloud AI Providers</strong></td><td>The seven providers, their keys and models</td></tr>
+    <tr><td><strong>Local AI</strong></td><td><strong>Semantic Search Model</strong> and the semantic index; <strong>Desktop CLI Tools</strong> (Ollama and friends); <strong>Text Rules Only (no AI)</strong></td></tr>
+    <tr><td><strong>Sync &amp; Services</strong></td><td><strong>Cloud Sync</strong> and, once Google is connected, <strong>Calendar (read-only)</strong></td></tr>
+    <tr><td><strong>Display</strong></td><td><strong>AI Language</strong></td></tr>
+    <tr><td><strong>Data &amp; Storage</strong></td><td>Counts, <strong>Tag Manager</strong>, <strong>Export data</strong>, <strong>Import data</strong>, <strong>Reset All Data</strong></td></tr>
+    <tr><td><strong>About</strong></td><td>Version, <strong>Open Source Licenses</strong>, and a link to the <a href="./privacy.html">privacy policy</a></td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note">
+  <span class="note-title">Things that are not in Settings</span>
+  <ul>
+    <li><strong>No sync passphrase.</strong> There is no encryption control in the app.</li>
+    <li><strong>No switch for meaning-based search.</strong> It follows the model's state.</li>
+    <li><strong>No downloadable chat models.</strong> On Mac, local AI means Ollama.</li>
+    <li><strong>No ad settings</strong>, because the Mac app has no ads.</li>
+    <li><strong>No sync interval</strong>, and <strong>no update button</strong> — see <a href="#updates">section 19</a>.</li>
+  </ul>
+</div>
+
+<h2 id="data">18. Export, import and reset <a class="anchor" href="#data" aria-label="Link to this section">#</a></h2>
+
+<h3>Export</h3>
+<p><span class="path">Settings → Data &amp; Storage → Export data</span> downloads a single JSON file named <span class="path">HighMemo-backup-<em>date</em>-<em>time</em>.json</span>. It contains memos, tags, folders and links, with your images carried inside it.</p>
+<p>Two things are not embedded: thumbnails that came from a web page stay as the address they came from, and any image that lives only in your Drive copy stays as a reference to it. And a backup is your content, not your configuration — API keys, your chosen provider, language and appearance are not in it.</p>
+<p>There is no Markdown or PDF export. JSON is the only format.</p>
+
+<h3>Import</h3>
+<p><strong>Import data</strong> reads a backup back in and <strong>merges</strong> it. Nothing is deleted, matching items update to the newer version, and re-importing the same file does not create duplicates.</p>
+
+<h3>Reset All Data</h3>
+<p>Deletes every memo, tag, folder and link on this Mac <em>and</em> in your Drive copy including uploaded images. A confirmation card appears first. It deliberately keeps your settings, API keys, Google connection, language and appearance.</p>
+
+<h2 id="updates">19. Updates <a class="anchor" href="#updates" aria-label="Link to this section">#</a></h2>
+
+<p>HighMemo for Mac keeps itself up to date. It checks for a new version when it starts and every few hours after that, downloads one quietly in the background, and puts it in place the next time you quit and reopen the app.</p>
+
+<p>There is no update button and no prompt. That is deliberate: this is an app people leave open for days, and an update dialog in the middle of a sentence — or a forced restart — is worse than a quiet swap on the next launch. If you want to be sure you are current, quit HighMemo and open it again.</p>
+
+<p>The check goes to GitHub, where the releases are published. If your Mac is offline it fails silently and the app starts normally.</p>
+
+<h2 id="differences">20. What Mac does not do <a class="anchor" href="#differences" aria-label="Link to this section">#</a></h2>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Feature</th><th>Mac</th><th>Phone</th></tr></thead>
+  <tbody>
+    <tr><td>Live Markdown editor</td><td><span class="plat on">yes</span></td><td><span class="plat off">edit and preview</span></td></tr>
+    <tr><td>Reading text inside images</td><td><span class="plat on">yes</span></td><td><span class="plat off">iPhone yes · Android not at all in links</span></td></tr>
+    <tr><td>Paste and drag files in</td><td><span class="plat on">yes</span></td><td><span class="plat off">no</span></td></tr>
+    <tr><td>Drag a calendar event into a memo</td><td><span class="plat on">yes</span></td><td><span class="plat off">no</span></td></tr>
+    <tr><td>Word analysis for tags without AI</td><td><span class="plat on">yes</span></td><td><span class="plat off">simpler</span></td></tr>
+    <tr><td>Sharing into the app from other apps</td><td><span class="plat off">no — paste or drag</span></td><td><span class="plat on">yes</span></td></tr>
+    <tr><td>Reminder notifications</td><td><span class="plat off">no</span></td><td><span class="plat on">yes</span></td></tr>
+    <tr><td>Arrival at a place, while closed</td><td><span class="plat off">no</span></td><td><span class="plat on">yes</span></td></tr>
+    <tr><td>Voice dictation</td><td><span class="plat off">no</span></td><td><span class="plat on">yes</span></td></tr>
+    <tr><td>Downloadable on-device chat models</td><td><span class="plat off">no — Ollama instead</span></td><td><span class="plat on">yes, on capable devices</span></td></tr>
+    <tr><td>Ads</td><td><span class="plat on">none</span></td><td><span class="plat off">yes</span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="trouble">21. Troubleshooting <a class="anchor" href="#trouble" aria-label="Link to this section">#</a></h2>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>What you see</th><th>Why, and what to do</th></tr></thead>
+  <tbody>
+    <tr><td>macOS will not open the app</td><td>It came from outside the App Store. <span class="path">System Settings → Privacy &amp; Security</span> → <strong>Open Anyway</strong>. <a href="#install">Section 2</a>.</td></tr>
+    <tr><td>A reminder you set never alerted you</td><td>Expected on Mac. <a href="#reminders">Section 12</a>.</td></tr>
+    <tr><td>Ollama shows a red dot</td><td>It is not running, or not on the usual address. Open the Ollama app, or run <code>ollama serve</code>, then <strong>Check Status</strong>.</td></tr>
+    <tr><td>Ollama is green but nothing happens</td><td>No model is pulled. Run <code>ollama pull gemma3</code> (or any model) and try again.</td></tr>
+    <tr><td>Memos have no summary, tags or category</td><td>No AI provider is connected. <a href="#ai">Section 14</a>. Existing memos get them from the wand icon.</td></tr>
+    <tr><td><strong>Recommend</strong> is always empty</td><td>The search model is not ready. Check <span class="path">Settings → Local AI → Semantic Search Model</span>. <strong>Related</strong> is separate and only ever holds links you made yourself.</td></tr>
+    <tr><td>Your Mac and phone disagree</td><td>Sync runs on open and every 5 minutes while open. Run it on both. A sync will not pull into an editor you have open — close it first.</td></tr>
+    <tr><td>Sync says the session expired</td><td><strong>Disconnect</strong> then <strong>Connect Google</strong> again.</td></tr>
+    <tr><td>A memo shows a dashed ring on the graph</td><td>The AI has not finished with it. It goes away by itself.</td></tr>
+    <tr><td>You are not sure the app is current</td><td>Quit it and open it again; a downloaded update installs on quit. <a href="#updates">Section 19</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Anything else: <a href="mailto:highgarden0@gmail.com">highgarden0@gmail.com</a>.</p>
+
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <div>HighMemo · Made by HighGarden · <a href="mailto:highgarden0@gmail.com">highgarden0@gmail.com</a></div>
+    <div class="site-foot-links">
+      <a href="./index.html">Home</a>
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms of Service</a>
+      <a href="./guide-ios.html">iPhone guide</a>
+      <a href="./guide-android.html">Android guide</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1214 @@
+/*
+ * HighMemo site — shared stylesheet.
+ *
+ * WHY A SHARED FILE AND NOT INLINE CSS: web/privacy.html keeps its CSS inline because it is a
+ * single published legal page that must never change shape when anything else does. The four
+ * pages added around it (landing + three guides) are the opposite case — they share a header,
+ * footer, callouts and a screenshot layout, and five inline copies of that would drift within a
+ * release. This is still a static site: one plain .css file, no build step, no external fonts.
+ *
+ * The palette follows `src/presentation/theme/themes.ts` (`lightTheme` / `darkTheme`). This page
+ * uses the same warm light surfaces, deep ink, and emerald action colour as the current app UI.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Brand — current app emerald ramp */
+  --sage-light: #00e676;
+  --sage: #00c867;
+  --sage-deep: #006132;
+
+  /* Light theme — themes.ts lightTheme */
+  --bg: #f5f4f2;
+  --bg-alt: #eceae7;
+  --panel: #ffffff;
+  --fg: #0c0a09;
+  --fg-soft: #4e4e4e;
+  --muted: #706a62;
+  --rule: #dad7d3;
+  --rule-strong: #d0ccc7;
+  --accent: #00763c;
+  --code-bg: rgba(0, 0, 0, 0.05);
+
+  --note-bg: rgba(0, 120, 61, 0.07);
+  --note-border: rgba(0, 120, 61, 0.28);
+  --warn-bg: rgba(255, 149, 0, 0.1);
+  --warn-border: rgba(255, 149, 0, 0.42);
+  --shot-bg: #eceae7;
+
+  --radius: 12px;             /* appChrome radius.md */
+  --radius-lg: 16px;          /* appChrome radius.lg */
+  --measure: 46rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme — themes.ts darkTheme */
+    --bg: #101112;
+    --bg-alt: #191a1b;
+    --panel: #202122;
+    --fg: #f7f8f8;
+    --fg-soft: #d0d6e0;
+    --muted: #8d929b;
+    --rule: rgba(255, 255, 255, 0.14);
+    --rule-strong: rgba(255, 255, 255, 0.28);
+    --accent: #00e676;
+    --code-bg: rgba(255, 255, 255, 0.08);
+
+    --note-bg: rgba(0, 230, 118, 0.1);
+    --note-border: rgba(0, 230, 118, 0.34);
+    --warn-bg: rgba(255, 196, 89, 0.12);
+    --warn-border: rgba(255, 196, 89, 0.44);
+    --shot-bg: #191919;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  overflow-wrap: break-word;
+}
+
+/*
+ * `height: auto` is not cosmetic here — without it the screenshots were STRETCHED.
+ *
+ * Every `<img>` carries `width`/`height` attributes (they reserve layout space and stop the page
+ * from jumping as images load). Those attributes set the used height, so `max-width: 100%` shrank
+ * the width alone and left the height at its declared 880px: the hero shot rendered 230×880 from a
+ * 405×880 source — squeezed 43% horizontally — and the grid shots 335×880. A phone screenshot
+ * distorted that way reads as a broken image, which is exactly how it was reported.
+ */
+img, svg { max-width: 100%; height: auto; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible,
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------------------------------------------------------------- site chrome */
+
+.site-head {
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.site-head-in {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: .7rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-weight: 700;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.brand:hover { text-decoration: none; }
+.brand img { width: 26px; height: 26px; border-radius: 6px; }
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: .25rem 1.1rem;
+  flex-wrap: wrap;
+  font-size: .92rem;
+}
+.site-nav a { color: var(--muted); }
+.site-nav a[aria-current="page"] { color: var(--fg); font-weight: 600; }
+
+main { max-width: var(--measure); margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+main.wide { max-width: 62rem; }
+
+footer.site-foot {
+  border-top: 1px solid var(--rule);
+  background: var(--bg-alt);
+  color: var(--muted);
+  font-size: .86rem;
+}
+.site-foot-in {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 2.5rem;
+  display: flex;
+  gap: .5rem 1.5rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.site-foot a { color: var(--muted); text-decoration: underline; }
+.site-foot-links { margin-left: auto; display: flex; gap: .25rem 1.2rem; flex-wrap: wrap; }
+
+/* ---------------------------------------------------------------- typography */
+
+h1 {
+  font-size: 1.95rem;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin: 0 0 .6rem;
+}
+h2 {
+  font-size: 1.28rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  margin: 3rem 0 .7rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--rule);
+}
+h2:first-of-type { border-top: 0; padding-top: 0; }
+h3 {
+  font-size: 1.04rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin: 2rem 0 .5rem;
+}
+h4 {
+  font-size: .95rem;
+  margin: 1.4rem 0 .4rem;
+}
+p, li { margin: 0 0 .9rem; }
+ul, ol { padding-left: 1.3rem; margin: 0 0 1rem; }
+li > ul, li > ol { margin-top: .4rem; }
+strong { font-weight: 600; }
+
+.lede { font-size: 1.06rem; color: var(--fg-soft); }
+.sub { color: var(--muted); font-size: .92rem; }
+
+code {
+  background: var(--code-bg);
+  padding: .12em .38em;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .88em;
+  overflow-wrap: anywhere;
+}
+kbd {
+  background: var(--code-bg);
+  border: 1px solid var(--rule-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: .06em .38em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .85em;
+}
+
+/*
+ * Where in the UI something lives. Used constantly in the guides, so it gets a token.
+ * It must WRAP: these strings are long ("Settings → Local AI → Semantic Search Model") and a
+ * nowrap version pushed the page 49px wider than a 280px viewport, which is the one failure this
+ * site is not allowed to have. Breaking mid-path is ugly; a horizontally scrolling page is worse.
+ */
+.path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .86em;
+  color: var(--fg-soft);
+  background: var(--code-bg);
+  padding: .1em .4em;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------- tables */
+
+.table-wrap { overflow-x: auto; margin: 0 0 1.4rem; -webkit-overflow-scrolling: touch; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 32rem;
+  font-size: .93rem;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: .55rem .7rem;
+  border-bottom: 1px solid var(--rule);
+}
+th { font-weight: 600; white-space: nowrap; }
+thead th { border-bottom: 1px solid var(--rule-strong); }
+tbody tr:last-child td { border-bottom: 0; }
+
+/* ---------------------------------------------------------------- callouts */
+
+.note, .warn {
+  border: 1px solid var(--note-border);
+  background: var(--note-bg);
+  border-radius: var(--radius);
+  padding: .9rem 1rem;
+  margin: 0 0 1.4rem;
+  font-size: .95rem;
+}
+.warn { border-color: var(--warn-border); background: var(--warn-bg); }
+.note > :last-child, .warn > :last-child { margin-bottom: 0; }
+.note-title, .warn-title {
+  display: block;
+  font-weight: 600;
+  margin-bottom: .3rem;
+  font-size: .9rem;
+  letter-spacing: .01em;
+}
+
+/* Platform availability badge, inline in headings and lists. */
+.plat {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .15em .5em;
+  border-radius: 999px;
+  border: 1px solid var(--rule-strong);
+  color: var(--muted);
+  vertical-align: .12em;
+  white-space: nowrap;
+}
+/*
+ * The light-mode text colour here is NOT --sage-deep, and that is deliberate. This badge paints its
+ * own pale sage chip, so the text is measured against the chip and not against the page: #657f63 on
+ * that composite is 3.94:1, under the 4.5:1 floor, and the badge is 0.7rem so it counts as body text
+ * rather than large text. #4f6b4d measures 5.29:1 on the chip and 5.91:1 on bare white. The token is
+ * left alone because --sage-deep is also the hero fill and the primary button, where it is a
+ * background rather than text.
+ * Dark mode keeps --sage-light: 7.85:1 on the chip over #111.
+ */
+.plat.on { border-color: var(--sage); color: #4f6b4d; background: rgba(136, 173, 131, 0.14); }
+.plat.off { border-color: var(--rule-strong); }
+@media (prefers-color-scheme: dark) {
+  .plat.on { color: var(--sage-light); }
+}
+
+/* ---------------------------------------------------------------- hero */
+
+/*
+ * The hero art (img/hero-bg.jpg) is _workspace/promo/assets/concept/hero_bg_2400x1200.png, made
+ * for exactly this: no text is baked into it, and its left half is empty so the headline can be
+ * HTML. Do not re-render the words into the image — they would stop being translatable,
+ * selectable, resizable and theme-aware, and every copy change would become an image change.
+ *
+ * The art is one fixed green in both themes, so the hero carries its own light-on-dark colours
+ * instead of the page tokens. The dark scrim is not decoration: white on the bare art measures
+ * about 3:1, which is under the 4.5:1 body-text floor. The scrim takes the text area to ~11:1.
+ * Narrow screens get a flat scrim because the single-column text spans the lighter right side too.
+ */
+.hero {
+  background-color: var(--sage-deep);
+  background-image:
+    linear-gradient(100deg, rgba(17, 28, 15, 0.64) 0%, rgba(17, 28, 15, 0.52) 46%, rgba(17, 28, 15, 0.26) 100%),
+    url("./img/hero-bg.jpg");
+  background-size: auto, cover;
+  background-position: center, center right;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+}
+.hero h1 { color: #ffffff; }
+.hero .btn {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #ffffff;
+}
+.hero .btn:hover { background: rgba(255, 255, 255, 0.26); border-color: #ffffff; }
+.hero .btn-primary { background: #ffffff; border-color: #ffffff; color: #1b2a18; }
+.hero .btn-primary:hover { background: #ebefe8; border-color: #ebefe8; color: #1b2a18; }
+.hero-in {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 3rem;
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  align-items: center;
+}
+.hero h1 { font-size: 2.3rem; letter-spacing: -0.03em; }
+.hero .tagline {
+  font-size: 1.12rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 1.1rem;
+  max-width: 32rem;
+}
+.hero .promise {
+  font-size: .98rem;
+  color: rgba(255, 255, 255, 0.84);
+  max-width: 32rem;
+}
+.hero-shot { justify-self: center; }
+.hero-shot img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 22px;         /* appChrome radius.xl */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: var(--shot-bg);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+  display: block;
+}
+
+@media (max-width: 46rem) {
+  .hero {
+    background-image:
+      linear-gradient(rgba(17, 28, 15, 0.6), rgba(17, 28, 15, 0.6)),
+      url("./img/hero-bg.jpg");
+  }
+  .hero-in { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding: 2.5rem 1.25rem; }
+  .hero h1 { font-size: 1.85rem; }
+  .hero-shot { order: -1; }
+  .hero-shot img { max-width: min(72vw, 280px); }
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.btn-row { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.6rem 0 .6rem; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .62rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule-strong);
+  font-size: .94rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--panel);
+  cursor: pointer;
+}
+.btn:hover { text-decoration: none; border-color: var(--fg); }
+.btn-primary {
+  background: var(--sage-deep);
+  border-color: var(--sage-deep);
+  color: #ffffff;
+}
+.btn-primary:hover { background: #56704f; border-color: #56704f; }
+@media (prefers-color-scheme: dark) {
+  .btn-primary { background: var(--sage); border-color: var(--sage); color: #10160f; }
+  .btn-primary:hover { background: var(--sage-light); border-color: var(--sage-light); }
+}
+
+/*
+ * Disabled download control. It is a <button disabled>, not a styled <a>: the macOS release is a
+ * draft, so there is no URL that would not 404, and a link element would still be focusable,
+ * copyable and followable by a crawler. The reason is always printed next to it — a dead button
+ * with no explanation reads as a broken page.
+ */
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: .55;
+  color: var(--muted);
+  background: var(--panel);
+  border-color: var(--rule);
+  border-style: dashed;
+}
+.btn[disabled]:hover { border-color: var(--rule); }
+
+/* ---------------------------------------------------------------- feature blocks */
+
+.features { display: grid; gap: 1.5rem 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin: 1.5rem 0 0; }
+.feature h3 { margin-top: 0; }
+.feature p { color: var(--fg-soft); font-size: .95rem; }
+
+/* ---------------------------------------------------------------- screenshots */
+
+figure.shot {
+  margin: 1.6rem 0;
+  padding: 0;
+}
+figure.shot img {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule-strong);
+  background: var(--shot-bg);
+}
+figure.shot figcaption {
+  font-size: .88rem;
+  color: var(--muted);
+  margin-top: .6rem;
+  max-width: 32rem;
+}
+.shot-grid {
+  display: grid;
+  gap: 1.6rem 1.4rem;
+  /*
+   * `minmax(13rem, …)` let `auto-fit` add a column as soon as 208px fit, so a WIDER page made the
+   * screenshots SMALLER: measured 229px at 480px of container, 218px at 700px (3 columns), 238px at
+   * 1280px (5 columns) — never more than 0.65 of the image's own width at any size. A phone
+   * screenshot at 220px has UI text at a sixth of its real size; it is a picture of a screen rather
+   * than something you can read.
+   *
+   * Raising the floor to 17rem caps the row at three columns inside `max-width`, and `min(100%, …)`
+   * is what lets it still collapse to one column on a narrow screen without overflowing.
+   */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  max-width: 60rem;
+  margin: 1.5rem 0 2rem;
+}
+.shot-grid figure.shot { margin: 0; }
+.shot-grid figure.shot img { max-width: 100%; }
+
+/* Short visual narratives keep feature explanation in the captions, not a wall of prose. */
+.visual-sequence {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1.4rem;
+  max-width: 46rem;
+  margin: 1.5rem 0 1rem;
+}
+.visual-sequence figure.shot { margin: 0; }
+.visual-sequence figure.shot img { max-width: 100%; }
+.feature-note { max-width: 46rem; color: var(--muted); }
+
+.feature-showcase {
+  display: grid;
+  grid-template-columns: minmax(15rem, .62fr) minmax(20rem, 1.38fr);
+  gap: 2rem;
+  align-items: center;
+  margin: 4rem 0;
+}
+.feature-showcase-reverse .showcase-copy { order: 2; }
+.feature-showcase figure.shot { margin: 0; }
+.feature-showcase .eyebrow {
+  margin: 0 0 .55rem;
+  color: var(--sage-dark);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.feature-showcase h2 { margin-top: 0; }
+.feature-showcase p { max-width: 31rem; }
+
+/* Android receives its own four-frame story rather than a tiny platform badge. The captures use
+   the same fictional simulator corpus as the iPhone screenshots immediately above, so readers can
+   compare the actual workflows instead of inferring parity from a sentence. */
+.platform-showcase {
+  margin: 4rem 0;
+}
+.platform-showcase-copy {
+  max-width: 42rem;
+}
+.platform-showcase .eyebrow {
+  margin: 0 0 .55rem;
+  color: var(--sage-dark);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.platform-showcase h2 { margin-top: 0; }
+.platform-shot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+.platform-shot-grid figure.shot { margin: 0; }
+.platform-shot-grid figure.shot img { width: 100%; }
+
+/* Presentation View needs one landscape Mac frame and one portrait iPhone frame together.
+   The Mac image remains the visual anchor; the phone proves the same reading mode travels with
+   the memo instead of being a desktop-only feature. */
+.presentation-shots {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: end;
+}
+.presentation-shots figure.shot { margin: 0; }
+.presentation-shots .presentation-phone { justify-self: center; }
+.presentation-shots .presentation-phone img { max-width: min(100%, 20rem); }
+.presentation-shots .presentation-phone figcaption { max-width: 20rem; }
+
+/* Keep the landscape reading surface large enough to inspect. The explanatory copy introduces
+ * Presentation View above it; it does not compete with the Mac frame for horizontal space. */
+.presentation-showcase {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+.presentation-showcase .showcase-copy {
+  max-width: 42rem;
+}
+.presentation-showcase .presentation-shots {
+  width: min(100%, 72rem);
+}
+
+/*
+ * ---------------------------------------------------------------- feature spotlight
+ *
+ * One screenshot beside the paragraphs that explain it (`.spot` on the landing page's #location
+ * section). Flexbox rather than grid, and that is the whole reason this rule exists in this shape:
+ * the figure is inside an HTML comment until its file is committed, and a two-column grid would
+ * hold a 320px column open for an element that is not there, leaving a visible empty gutter beside
+ * the text. With flex the copy simply takes the row on its own, so the section is presentable
+ * before the screenshot lands and needs no CSS change when it does.
+ *
+ * `min-width: 0` on the copy is not decorative either — a flex item defaults to its min-content
+ * width, and one long `.path` string is enough to push the row wider than the page.
+ */
+.spot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+  align-items: flex-start;
+  margin: 1.5rem 0 2rem;
+}
+.spot > figure.shot { margin: 0; flex: 0 0 320px; max-width: 100%; }
+/*
+ * `max-width` is what keeps this readable in BOTH states. Beside the screenshot the copy lands near
+ * 600px on a wide window, which is fine; with the figure still commented out it took the whole
+ * 952px row and the paragraphs ran to roughly 150 characters a line. The cap makes the interim
+ * state look deliberate instead of unfinished, and changes nothing once the figure is wired.
+ */
+.spot > .spot-copy { flex: 1 1 20rem; min-width: 0; max-width: 34rem; }
+.spot > .spot-copy > :last-child { margin-bottom: 0; }
+
+/*
+ * ---------------------------------------------------------------- light/dark pair
+ *
+ * Two screenshots of the same screen in the two themes, both always rendered.
+ *
+ * The tempting alternative is a `prefers-color-scheme` swap on a single figure, and the page does
+ * use that in `.shot-grid`. It is wrong here: a visitor in light mode would be served the light cut
+ * and would never learn a dark theme exists — on the one block whose only job is to show that it
+ * does. Auto-switching hides exactly what is being advertised.
+ *
+ * `max-width: 44rem` is what keeps the two frames readable. At two columns inside it each image
+ * lands near 320px, the same size the `.shot-grid` figures reach at three columns, so the pair does
+ * not become the small-print version of the gallery above it. `min(100%, 15rem)` is what lets the
+ * row collapse to one column on a narrow screen instead of overflowing it.
+ */
+.pair {
+  display: grid;
+  gap: 1.2rem 1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  max-width: 44rem;
+  margin: 1.5rem 0 1rem;
+}
+.pair figure.shot { margin: 0; }
+/* The 320px cap belongs to a lone figure; inside the pair the column already limits the width. */
+.pair figure.shot img { max-width: 100%; }
+/*
+ * The pair's captions are labels ("Light", "Dark"), not sentences, so they are set apart from the
+ * descriptive `figure.shot figcaption` above rather than inheriting its body-text look.
+ */
+.pair figure.shot figcaption {
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: .5rem;
+}
+
+/*
+ * ---------------------------------------------------------------- wide (Mac) screenshots
+ *
+ * The Mac captures are 1440 × 960 — a 3:2 LANDSCAPE frame, where every other screenshot on this
+ * site is a 405 × 880 or 396 × 880 phone frame.
+ *
+ * They must not be put in `.shot-grid` or `.pair`. Those lay out columns around 320px because that
+ * is a readable width for a tall phone frame; a 3:2 window at 320px is 213px tall, and the Mac
+ * window's whole subject is that three panels have content in them at once. 04_visual_manifest.md
+ * §14-6 argues the same thing from the other side and is why the files were written at 1440 rather
+ * than the phone set's long-edge-880 rule.
+ *
+ * So `.wide` lifts the 320px cap and lets the figure take the column: ~950px on the landing page,
+ * ~700px in a guide, against a 1440px file — still oversampled, the way the phone cuts are (405
+ * file / 320 shown). `height: auto` from the global `img` rule does the scaling; the width/height
+ * attributes stay on the tag because they reserve the space and stop the page jumping.
+ */
+figure.shot.wide { max-width: 100%; }
+figure.shot.wide img { max-width: 100%; }
+/* Stacked wide figures need the caption clear of the next frame. */
+figure.shot.wide + figure.shot.wide { margin-top: 2rem; }
+
+@media (max-width: 46rem) {
+  .feature-showcase { grid-template-columns: 1fr; gap: 1.25rem; margin: 3rem 0; }
+  .feature-showcase-reverse .showcase-copy { order: initial; }
+  .platform-showcase { margin: 3rem 0; }
+  .platform-shot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .presentation-shots { gap: 1.5rem; }
+  .presentation-shots .presentation-phone { justify-self: center; }
+}
+
+/*
+ * A `.shot-todo` rule used to live here: a loud dashed box for a platform whose screenshots had
+ * not been captured. Android is now shot (11 cuts) and the Mac guide has its own captures as of
+ * 2026-07-31 (visual-manifest §14), so nothing uses it and dead CSS in a hand-maintained file is a
+ * trap. If a future page needs a placeholder again, take it back out of git history rather than
+ * guessing at it.
+ */
+
+/* ---------------------------------------------------------------- guide index */
+
+.toc {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+  padding: 1rem 1.2rem;
+  margin: 1.8rem 0 2.4rem;
+}
+.toc h2 {
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  border: 0;
+  padding: 0;
+  margin: 0 0 .6rem;
+}
+.toc ol { margin: 0; padding-left: 1.2rem; columns: 2; column-gap: 2rem; font-size: .93rem; }
+.toc li { margin: 0 0 .35rem; break-inside: avoid; }
+@media (max-width: 34rem) { .toc ol { columns: 1; } }
+
+/* Cross-platform guide switcher at the top of each manual. */
+.guide-switch { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.4rem 0 2rem; }
+.guide-switch a {
+  padding: .4rem .85rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  font-size: .9rem;
+  color: var(--muted);
+}
+.guide-switch a:hover { text-decoration: none; border-color: var(--fg); color: var(--fg); }
+.guide-switch a[aria-current="page"] {
+  border-color: var(--sage);
+  background: rgba(136, 173, 131, 0.16);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* A visual introduction keeps platform manuals useful before the long reference sections. */
+.guide-current {
+  margin: 0 0 2.6rem;
+  padding: 1.25rem 0 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.guide-current > div:first-child { max-width: 42rem; }
+.guide-current h2 { margin: 0 0 .7rem; padding: 0; border: 0; }
+.guide-current .eyebrow { margin-bottom: .5rem; }
+.guide-current .shot-grid { margin-bottom: 0; }
+.guide-current-single { max-width: 24rem; margin-bottom: 0; }
+.guide-current-desktop { display: grid; gap: 1.5rem; margin-top: 1.4rem; }
+.guide-current-desktop figure.shot { margin: 0; }
+
+/* Anchored section headings get a quiet self-link on hover. */
+.anchor { color: var(--muted); font-weight: 400; text-decoration: none; opacity: 0; padding-left: .4rem; }
+h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* ---------------------------------------------------------------- landing page refresh
+ *
+ * The landing page uses an editorial product-story layout rather than another generic grid of
+ * feature cards. It stays deliberately scoped to `.landing-page`: privacy, terms and the platform
+ * guides use this stylesheet too, and their reference-document hierarchy must remain calm.
+ *
+ * The product screenshots remain the proof. Decorative layers use CSS only, so the page does not
+ * introduce a new image dependency or obscure the real HighMemo interface. The composition gives
+ * the hero one clear focal point, then alternates close reading frames, broad desktop frames and
+ * compact platform collections as the visitor scrolls.
+ */
+
+body.landing-page {
+  background:
+    radial-gradient(circle at 12% 3%, rgba(0, 118, 60, .08), transparent 26rem),
+    linear-gradient(180deg, #f7f6f3 0%, var(--bg) 33rem, var(--bg) 100%);
+}
+
+body.landing-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: .28;
+  background-image: linear-gradient(rgba(12, 10, 9, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(12, 10, 9, .02) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+.landing-head {
+  border-bottom-color: color-mix(in srgb, var(--rule-strong) 72%, transparent);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(18px) saturate(1.1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+}
+
+.landing-head .site-head-in { max-width: 86rem; min-height: 4.1rem; }
+.landing-head .brand { font-size: 1.08rem; letter-spacing: -.025em; }
+.landing-head .brand img { width: 30px; height: 30px; }
+.landing-head .site-nav { gap: .25rem .35rem; }
+.landing-head .site-nav a {
+  padding: .36rem .62rem;
+  border-radius: 999px;
+  transition: background-color .18s ease, color .18s ease;
+}
+.landing-head .site-nav a:hover {
+  background: var(--panel);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.landing-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  min-height: min(46rem, calc(100svh - 4rem));
+  border-bottom: 0;
+  background-color: #0d2117;
+  background-image: none;
+}
+
+.landing-hero::before,
+.landing-hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.landing-hero::before {
+  inset: -1.5rem;
+  z-index: 0;
+  background: url("./img/hero-bg.jpg") center / cover no-repeat;
+  filter: blur(13px);
+  transform: scale(1.025);
+}
+.landing-hero::after {
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 63% 87%, rgba(0, 230, 118, .14), transparent 19rem),
+    linear-gradient(100deg, rgba(6, 16, 10, .97) 0%, rgba(7, 25, 15, .86) 36%, rgba(7, 25, 15, .34) 72%, rgba(7, 25, 15, .5) 100%);
+}
+
+.landing-hero .hero-in {
+  position: relative;
+  z-index: 1;
+  max-width: 86rem;
+  min-height: min(46rem, calc(100svh - 4rem));
+  padding: clamp(4.5rem, 9vw, 8rem) 1.5rem clamp(3.5rem, 7vw, 6rem);
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .95fr);
+  gap: clamp(2rem, 7vw, 7rem);
+  align-items: center;
+}
+
+.landing-hero .hero-copy {
+  max-width: 41rem;
+  animation: landing-rise .72s cubic-bezier(.16, 1, .3, 1) both;
+}
+.landing-hero .hero-copy::before {
+  content: "A calmer way to keep track";
+  display: block;
+  width: fit-content;
+  margin-bottom: 1.25rem;
+  padding: .28rem .66rem;
+  border: 1px solid rgba(210, 255, 226, .36);
+  border-radius: 999px;
+  color: rgba(236, 255, 242, .88);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.landing-hero h1 {
+  max-width: 10ch;
+  font-size: clamp(3rem, 6.6vw, 6.5rem);
+  line-height: .94;
+  letter-spacing: -.065em;
+  text-wrap: balance;
+}
+.landing-hero .tagline {
+  max-width: 35rem;
+  margin-top: 1.7rem;
+  font-size: clamp(1.06rem, 1.45vw, 1.3rem);
+  line-height: 1.55;
+}
+.landing-hero .promise {
+  max-width: 34rem;
+  margin-top: 1.1rem;
+  font-size: .99rem;
+  line-height: 1.7;
+}
+.landing-hero .btn-row { margin-top: 2rem; }
+.landing-hero .btn {
+  min-height: 2.85rem;
+  padding-inline: 1.25rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .12);
+}
+
+.landing-hero .hero-stage {
+  position: relative;
+  width: min(100%, 25.5rem);
+  justify-self: end;
+  margin: 1.4rem 1.4rem 0 0;
+  padding: .78rem;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, rgba(255,255,255,.3), rgba(255,255,255,.05));
+  border: 1px solid rgba(255, 255, 255, .35);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, .42), 0 0 0 1.1rem rgba(255, 255, 255, .055);
+  animation: landing-device .9s .08s cubic-bezier(.16, 1, .3, 1) both;
+}
+.landing-hero .hero-stage::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 1.2rem -1.9rem -1.9rem 1.2rem;
+  z-index: -1;
+  border-radius: 2rem;
+  background: linear-gradient(145deg, rgba(0, 230, 118, .58), rgba(0, 101, 48, .14));
+  filter: blur(.2px);
+}
+.landing-hero .hero-shot img {
+  max-width: none;
+  width: 100%;
+  border: 0;
+  border-radius: 1.35rem;
+  box-shadow: none;
+}
+
+/* `main.wide` has a type selector in the shared stylesheet, so this combined selector is needed
+ * to make the landing's wider editorial canvas win without widening the guides. */
+main.wide.landing {
+  max-width: 86rem;
+  padding-top: clamp(4.5rem, 9vw, 8rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.landing > h2,
+.landing .showcase-copy h2,
+.landing .platform-showcase h2 {
+  max-width: 16ch;
+  margin: clamp(5rem, 9vw, 8rem) 0 1.35rem;
+  padding: 0;
+  border: 0;
+  font-size: clamp(2.25rem, 4.4vw, 4.6rem);
+  line-height: .99;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+.landing > h2:first-of-type { margin-top: 0; }
+.landing .anchor {
+  display: inline-flex;
+  vertical-align: .16em;
+  width: 1.25rem;
+  height: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  font-size: .72rem;
+}
+
+.landing .features {
+  counter-reset: landing-feature;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: .85rem;
+  margin: 2.25rem 0 0;
+}
+.landing .feature {
+  position: relative;
+  grid-column: span 4;
+  min-height: 15.5rem;
+  padding: 1.55rem 1.45rem 1.35rem;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 1.35rem;
+  background: color-mix(in srgb, var(--panel) 88%, var(--bg-alt));
+  box-shadow: 0 1.1rem 2.8rem rgba(38, 30, 22, .045);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.landing .feature::before {
+  counter-increment: landing-feature;
+  content: "0" counter(landing-feature);
+  display: block;
+  margin-bottom: 2.4rem;
+  color: var(--accent);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+.landing .feature:nth-child(2),
+.landing .feature:nth-child(5) { grid-column: span 5; }
+.landing .feature:nth-child(3),
+.landing .feature:nth-child(6) { grid-column: span 3; }
+.landing .feature:nth-child(7) { grid-column: span 7; }
+.landing .feature:nth-child(8) { grid-column: span 5; }
+.landing .feature:nth-child(3)::after,
+.landing .feature:nth-child(6)::after {
+  content: "";
+  position: absolute;
+  width: 8rem;
+  aspect-ratio: 1;
+  right: -3.8rem;
+  top: -2.8rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.25rem color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.landing .feature:hover {
+  transform: translateY(-.3rem);
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--rule));
+  box-shadow: 0 1.5rem 3rem rgba(38, 30, 22, .10);
+}
+.landing .feature h3 {
+  max-width: 17ch;
+  font-size: clamp(1.18rem, 1.8vw, 1.55rem);
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+.landing .feature p { margin-bottom: 0; font-size: .96rem; line-height: 1.64; }
+.landing .feature .sub { margin-top: .65rem; }
+
+.landing figure.shot {
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  border-radius: 1.4rem;
+  background: var(--panel);
+  box-shadow: 0 1.5rem 3.2rem rgba(41, 33, 26, .10);
+}
+.landing figure.shot img { border: 0; border-radius: 0; background: transparent; }
+.landing figure.shot figcaption {
+  margin: 0;
+  padding: .85rem 1rem 1rem;
+  max-width: none;
+  border-top: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--panel) 86%, var(--bg-alt));
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.5;
+}
+.landing figure.shot figcaption strong { color: var(--fg); }
+
+.landing .visual-sequence {
+  max-width: 58rem;
+  gap: 1.25rem;
+  margin-top: 2.25rem;
+}
+.landing .visual-sequence figure.shot:first-child { transform: translateY(2rem); }
+.landing .visual-sequence figure.shot:nth-child(2) { box-shadow: 0 2rem 4.5rem rgba(0, 105, 55, .16); }
+.landing .feature-note {
+  margin-top: 2.4rem;
+  padding: 1.2rem 1.35rem;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--panel) 74%, var(--bg-alt));
+  border-radius: 0 1rem 1rem 0;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.landing .pair {
+  max-width: 58rem;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+.landing .pair figure.shot { margin: 0; }
+.landing .pair figure.shot:first-child { transform: rotate(-1.4deg) translateY(.55rem); }
+.landing .pair figure.shot:nth-child(2) { transform: rotate(1.4deg) translateY(-.55rem); }
+.landing .pair figure.shot figcaption { letter-spacing: .12em; }
+
+.landing .shot-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: none;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+.landing .shot-grid figure.shot:nth-child(2) { transform: translateY(2.7rem); }
+.landing .shot-grid figure.shot:nth-child(3) { transform: translateY(.8rem); }
+.landing .shot-grid + .sub { max-width: 40rem; margin: 5rem 0 0; }
+
+.landing .platform-showcase {
+  position: relative;
+  margin: clamp(6rem, 10vw, 10rem) 0;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(0, 118, 60, .16), transparent 27rem),
+    var(--panel);
+}
+.landing .platform-showcase::before {
+  content: "ANDROID";
+  position: absolute;
+  right: -1rem;
+  top: 1rem;
+  color: color-mix(in srgb, var(--fg) 6%, transparent);
+  font-size: clamp(4rem, 11vw, 10rem);
+  font-weight: 850;
+  letter-spacing: -.09em;
+  line-height: .8;
+  pointer-events: none;
+}
+.landing .platform-showcase-copy { position: relative; z-index: 1; max-width: 39rem; }
+.landing .platform-showcase .eyebrow,
+.landing .feature-showcase .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .35rem .65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  color: var(--accent);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.landing .platform-showcase h2 { margin-top: 1rem; }
+.landing .platform-shot-grid { position: relative; z-index: 1; gap: .9rem; margin-top: 2.5rem; }
+.landing .platform-shot-grid figure.shot:nth-child(even) { transform: translateY(1.5rem); }
+
+.landing .feature-showcase {
+  position: relative;
+  grid-template-columns: minmax(18rem, .72fr) minmax(24rem, 1.28fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  margin: clamp(6rem, 11vw, 11rem) 0;
+  align-items: center;
+}
+.landing .feature-showcase::before {
+  content: "→";
+  position: absolute;
+  left: 38%;
+  top: -4.6rem;
+  color: color-mix(in srgb, var(--accent) 25%, transparent);
+  font-size: 7rem;
+  font-weight: 300;
+  line-height: 1;
+}
+.landing .feature-showcase .showcase-copy { position: relative; z-index: 1; }
+.landing .feature-showcase .showcase-copy h2 { margin: 1rem 0 1.25rem; }
+.landing .feature-showcase .showcase-copy > p:not(.eyebrow) { font-size: 1.08rem; line-height: 1.7; }
+.landing .feature-showcase figure.shot.wide { transform: rotate(.45deg); }
+.landing .feature-showcase-reverse figure.shot.wide { transform: rotate(-.35deg); }
+
+.landing .presentation-showcase {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  padding: clamp(1.2rem, 3vw, 2.5rem);
+  border-radius: 2rem;
+  background: linear-gradient(145deg, #12261a, #0c1510);
+  color: #f7faf7;
+}
+.landing .presentation-showcase::before { content: none; }
+.landing .presentation-showcase .showcase-copy { max-width: 45rem; }
+.landing .presentation-showcase .showcase-copy h2 { color: #ffffff; }
+.landing .presentation-showcase .showcase-copy p { color: rgba(245, 249, 245, .86); }
+.landing .presentation-showcase .showcase-copy .sub { color: rgba(222, 235, 225, .68); }
+.landing .presentation-showcase .eyebrow { background: rgba(255,255,255,.11); color: #d8ffe4; }
+.landing .presentation-showcase .presentation-shots {
+  grid-template-columns: minmax(0, 1.45fr) minmax(14rem, .55fr);
+  width: 100%;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: end;
+}
+.landing .presentation-showcase .presentation-phone {
+  width: min(100%, 19rem);
+  margin-inline: auto;
+  transform: rotate(1.5deg) translateY(1rem);
+}
+.landing .presentation-showcase figure.shot { border-color: rgba(255,255,255,.22); box-shadow: 0 1.7rem 4rem rgba(0,0,0,.36); }
+.landing .presentation-showcase figure.shot figcaption { background: #142219; border-color: rgba(255,255,255,.13); color: rgba(238,247,239,.7); }
+
+.landing #mentions + .shot-grid { max-width: 60rem; }
+.landing #mac + figure.shot.wide,
+.landing #download ~ figure.shot.wide { box-shadow: 0 2rem 4.8rem rgba(0, 0, 0, .15); }
+
+.landing .btn-row .btn {
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.landing .btn-row .btn:not([disabled]):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .7rem 1.5rem rgba(15, 48, 27, .14);
+}
+.landing ~ .site-foot { background: color-mix(in srgb, var(--bg-alt) 82%, var(--panel)); }
+
+@media (prefers-color-scheme: dark) {
+  body.landing-page {
+    background:
+      radial-gradient(circle at 12% 3%, rgba(0, 230, 118, .11), transparent 26rem),
+      linear-gradient(180deg, #111513 0%, var(--bg) 33rem, var(--bg) 100%);
+  }
+  body.landing-page::before { opacity: .16; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); }
+  .landing-head { background: color-mix(in srgb, #101112 86%, transparent); }
+  .landing .feature { background: color-mix(in srgb, var(--panel) 88%, #151817); box-shadow: 0 1.1rem 2.8rem rgba(0,0,0,.18); }
+  .landing .feature:hover { box-shadow: 0 1.6rem 3.4rem rgba(0,0,0,.32); }
+  .landing figure.shot { box-shadow: 0 1.5rem 3.2rem rgba(0,0,0,.34); }
+  .landing .platform-showcase { background: radial-gradient(circle at 100% 0%, rgba(0, 230, 118, .15), transparent 27rem), var(--panel); }
+  .landing .feature-note { background: color-mix(in srgb, var(--panel) 84%, #141715); }
+}
+
+@media (max-width: 64rem) {
+  .landing .feature { grid-column: span 6; }
+  .landing .feature:nth-child(2),
+  .landing .feature:nth-child(5),
+  .landing .feature:nth-child(3),
+  .landing .feature:nth-child(6),
+  .landing .feature:nth-child(7),
+  .landing .feature:nth-child(8) { grid-column: span 6; }
+  .landing .feature-showcase { grid-template-columns: minmax(0, 1fr); max-width: 48rem; }
+  .landing .feature-showcase::before { left: auto; right: 5%; top: -3rem; }
+  .landing .feature-showcase-reverse .showcase-copy { order: initial; }
+}
+
+@media (max-width: 46rem) {
+  .landing-head .site-head-in { padding-block: .6rem; }
+  .landing-head .site-nav { width: 100%; margin-left: 0; overflow-x: auto; flex-wrap: nowrap; padding-bottom: .15rem; }
+  .landing-head .site-nav a { white-space: nowrap; }
+  .landing-hero { min-height: auto; }
+  .landing-hero::before { background-position: 61% center; }
+  .landing-hero::after { background: linear-gradient(rgba(6, 16, 10, .76), rgba(6, 16, 10, .8)); }
+  .landing-hero .hero-in { min-height: auto; grid-template-columns: minmax(0, 1fr); padding: 3.5rem 1.25rem 4rem; gap: 2.7rem; }
+  .landing-hero .hero-copy { order: 2; }
+  .landing-hero .hero-stage { order: 1; width: min(78vw, 23rem); justify-self: center; margin: .3rem 0 0; }
+  .landing-hero h1 { max-width: 11ch; font-size: clamp(3rem, 15vw, 4.7rem); }
+  .landing-hero .tagline { font-size: 1.08rem; }
+  .landing { padding-inline: 1.1rem; }
+  .landing > h2,
+  .landing .showcase-copy h2,
+  .landing .platform-showcase h2 { font-size: clamp(2.25rem, 11.5vw, 3.4rem); margin-top: 5.5rem; }
+  .landing .features { display: block; margin-top: 1.5rem; }
+  .landing .feature { min-height: auto; margin-bottom: .8rem; padding: 1.35rem 1.2rem; }
+  .landing .feature::before { margin-bottom: 1.5rem; }
+  .landing .visual-sequence { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .landing .visual-sequence figure.shot:first-child { transform: translateY(1rem); }
+  .landing .pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .landing .shot-grid { grid-template-columns: minmax(0, 1fr); max-width: 22rem; margin-inline: auto; }
+  .landing .shot-grid figure.shot:nth-child(2),
+  .landing .shot-grid figure.shot:nth-child(3) { transform: none; }
+  .landing .shot-grid + .sub { margin-top: 2rem; }
+  .landing .platform-showcase { margin-inline: -.2rem; padding: 1.4rem 1rem 2.5rem; border-radius: 1.4rem; }
+  .landing .platform-showcase::before { top: 1.2rem; right: -.35rem; font-size: 4.6rem; }
+  .landing .platform-showcase h2 { margin-top: .9rem; }
+  .landing .platform-shot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; margin-top: 1.8rem; }
+  .landing .platform-shot-grid figure.shot:nth-child(even) { transform: translateY(.7rem); }
+  .landing .feature-showcase { margin-block: 6rem; }
+  .landing .feature-showcase::before { display: none; }
+  .landing .presentation-showcase { margin-inline: -.2rem; padding: 1.25rem .85rem 2rem; border-radius: 1.4rem; }
+  .landing .presentation-showcase .presentation-shots { grid-template-columns: minmax(0, 1fr); }
+  .landing .presentation-showcase .presentation-phone { width: min(72%, 19rem); transform: rotate(1.2deg); }
+  .landing figure.shot { border-radius: 1.1rem; }
+}
+
+@keyframes landing-rise {
+  from { opacity: 0; transform: translateY(1.25rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes landing-device {
+  from { opacity: 0; transform: translate3d(1.5rem, 1.5rem, 0) rotate(2.5deg); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+}

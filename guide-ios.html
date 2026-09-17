@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HighMemo for iPhone &amp; iPad — user guide</title>
+<meta name="description" content="Every HighMemo feature on iPhone and iPad: where it lives, how to use it, and what it needs connected before it works." />
+<meta name="robots" content="index,follow" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="./img/highmemo-mark.svg" />
+<link rel="stylesheet" href="./site.css" />
+<!--
+  Reference manual, not marketing copy. Rules that produced this page:
+    - Never describe a control that is not rendered. Two features exist in code with their UI
+      switched off (sync passphrase, and the removed Local Embedding toggle) — neither appears here.
+      See _workspace/promo/02_verifier_claims.md §8.
+    - Point at on-screen LABELS, never at file:line. Line numbers rot within a commit.
+    - The graph shows shared-tag hubs. Do not write connect / link / map / automatically about it.
+    - Home-screen widgets are deliberately absent: implemented but not verified on hardware
+      (02_verifier_claims.md §8, UNVERIFIED). Add them only after device QA.
+    - The on-device gate on THIS platform is two rules, not four: RAM < 4.5 GiB (hard floor) and
+      the first-run speed check. The 7 GiB and 2021 rules are gated to Android in the code
+      (src/services/device/deviceSpec.ts, androidLlmUnsafe) — never copy them onto this page from
+      guide-android.html.
+    - SEVEN figures carry a dark <source> (01, 03, 07, 08 from 438b27b8, and 14, 15, 16 added
+      2026-07-31), so they follow the reader's own colour scheme. The cuts WITHOUT an iPhone dark
+      capture are 04, 05, 06, 09, 10 and 12; do not add a <source> to those. A <source> pointing at a
+      missing file breaks the image for dark-mode readers and looks completely fine in light mode,
+      so it ships unnoticed.
+    - Cuts 14, 15 and 16 (`@` person, `@` memo, searching for a person) were added on 2026-07-31 to
+      sections 3 and 5. Section 5's figure has an Android twin that lives under a DIFFERENT
+      filename — 05_search_person there, 16_search_person here (04_visual_manifest.md §13-4). Do not
+      "align" the two names; the Android one is already published under its.
+    - This page was NOT shortened in the same pass that shortened the landing page, on purpose. It
+      is a reference manual, and the conditions and platform limits in it are the content.
+    - The alt text is NOT duplicated into light and dark variants. It describes what is on the screen,
+      and the screen is the same in both; two variants would be two sentences to keep true for no gain.
+    - 04_visual_manifest.md §12-1 replaced the LIGHT 02, 06, 08 and 12 cuts under their existing
+      filenames (b165b392 changed the reminder chip to a bell and fixed list-marker alignment). Every
+      alt text and caption here survived that untouched because none of them describes an icon, a
+      colour or a bullet. Keep writing them that way and re-shoots stay free.
+-->
+</head>
+<body>
+
+<header class="site-head">
+  <div class="site-head-in">
+    <a class="brand" href="./index.html">
+      <img src="./img/highmemo-mark.svg" alt="" width="26" height="26" />
+      HighMemo
+    </a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="./index.html#features">Features</a>
+      <a href="./guide-ios.html" aria-current="page">User guides</a>
+      <a href="./index.html#download">Download</a>
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<h1>HighMemo for iPhone and iPad</h1>
+<p class="lede">Every feature, where to find it, and what it needs before it works.</p>
+
+<nav class="guide-switch" aria-label="Choose a platform">
+  <a href="./guide-ios.html" aria-current="page">iPhone &amp; iPad</a>
+  <a href="./guide-android.html">Android</a>
+  <a href="./guide-desktop.html">Mac</a>
+</nav>
+
+<section class="guide-current" aria-labelledby="ios-current-title">
+  <div>
+    <p class="eyebrow">Current interface</p>
+    <h2 id="ios-current-title">HighMemo on iPhone, today</h2>
+    <p>Search a growing library, open a memo with its context, and switch to a calendar view for reminders and connected events. The same screens are available in light and dark appearance.</p>
+  </div>
+  <div class="shot-grid">
+    <figure class="shot">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-list-dark.jpg" />
+        <img src="./img/ios-2026-08-list-light.jpg" width="1320" height="2868" loading="lazy" alt="HighMemo's current iPhone memo list with search, filters and fictional demonstration memos." />
+      </picture>
+      <figcaption>Search and filter your library.</figcaption>
+    </figure>
+    <figure class="shot">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-detail-dark.jpg" />
+        <img src="./img/ios-2026-08-detail-light.jpg" width="1320" height="2868" loading="lazy" alt="HighMemo's current iPhone memo detail with reminder, summary, content and tags." />
+      </picture>
+      <figcaption>Keep the useful context with each memo.</figcaption>
+    </figure>
+    <figure class="shot">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="./img/ios-2026-08-calendar-dark.jpg" />
+        <img src="./img/ios-2026-08-calendar-light.jpg" width="1320" height="2868" loading="lazy" alt="HighMemo's current iPhone calendar with reminder entries." />
+      </picture>
+      <figcaption>See reminders alongside your notes.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#start">Before you start</a></li>
+    <li><a href="#home">The home screen</a></li>
+    <li><a href="#write">Writing a memo</a></li>
+    <li><a href="#share">Sending things in from other apps</a></li>
+    <li><a href="#list">The memo list, search and filters</a></li>
+    <li><a href="#detail">Opening a memo</a></li>
+    <li><a href="#organize">Tags, folders, pinning and people</a></li>
+    <li><a href="#graph">The graph view</a></li>
+    <li><a href="#documents">Documents</a></li>
+    <li><a href="#assistant">AI Assistant</a></li>
+    <li><a href="#reminders">Reminders</a></li>
+    <li><a href="#calendar">Calendar</a></li>
+    <li><a href="#ai">Setting up AI</a></li>
+    <li><a href="#search-model">The on-device search model</a></li>
+    <li><a href="#sync">Sync with your Google Drive</a></li>
+    <li><a href="#settings">Settings reference</a></li>
+    <li><a href="#data">Export, import and reset</a></li>
+    <li><a href="#permissions">Permissions and what leaves the device</a></li>
+    <li><a href="#trouble">Troubleshooting</a></li>
+  </ol>
+</div>
+
+<h2 id="start">1. Before you start <a class="anchor" href="#start" aria-label="Link to this section">#</a></h2>
+
+<p>There is no sign-up, no onboarding and no API key to paste. Install HighMemo, open it, and start typing. Nothing is connected on a fresh install.</p>
+
+<h3>What works with nothing connected</h3>
+<ul>
+  <li>Writing, editing and deleting memos</li>
+  <li>Attaching photos and files</li>
+  <li>Tags, folders, pinning</li>
+  <li>Searching and filtering</li>
+  <li>Time and location reminders</li>
+  <li>The graph view</li>
+  <li>Export and import</li>
+</ul>
+
+<h3>What needs something connected first</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Feature</th><th>What it needs</th></tr></thead>
+  <tbody>
+    <tr><td>Titles, summaries, tags and categories written for you</td><td>An AI provider — a cloud key you own, or a model on the device</td></tr>
+    <tr><td>AI Assistant</td><td>The same</td></tr>
+    <tr><td>Documents built from several memos</td><td>The same</td></tr>
+    <tr><td>Meaning-based search, and the <strong>Recommend</strong> list</td><td>The on-device search model (about 330&nbsp;MB)</td></tr>
+    <tr><td>The same memos on your other devices</td><td>A Google account, connected in Settings</td></tr>
+    <tr><td>Your schedule beside your memos</td><td>Google Calendar, connected in Settings</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note">
+  <span class="note-title">Two things to know on the first launch</span>
+  <p><strong>HighMemo shows ads.</strong> They appear as an occasional row inside the memo list — roughly one row per twenty memos. There is no paid version and no ad-free version, so there is no setting that turns them off. If you are in the EEA, the UK or Switzerland, a Google-certified consent form appears before any ad is loaded.</p>
+  <p><strong>You will be asked about a download.</strong> A dialog titled <em>Improve search quality?</em> offers an optional on-device model of about 330&nbsp;MB that powers meaning-based search and the <strong>Recommend</strong> list. Choose <strong>Download</strong> or <strong>Not now</strong> — see <a href="#search-model">section 14</a>. The app is fully usable either way.</p>
+</div>
+
+<h3>Language</h3>
+<p>HighMemo's interface is in English only. What language the <em>AI</em> writes in is a separate setting — <span class="path">Settings → Display → AI Language</span>, described in <a href="#settings">section 16</a>.</p>
+
+<h3>On iPad</h3>
+<p>Everything in this guide applies to iPad. The layout follows the orientation: <strong>held upright, iPad uses the same layout as iPhone</strong> — panels slide up over the graph. <strong>Turned sideways, it uses the wider layout</strong> — the graph on the left, what you are writing in the middle, and lists or Settings docked on the right, with draggable dividers between them. The editor can also expand to fill the whole area. Rotating the iPad switches between the two.</p>
+
+<h2 id="home">2. The home screen <a class="anchor" href="#home" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-03_graph.jpg" />
+    <img src="./img/ios-03_graph.jpg" width="405" height="880" loading="lazy"
+      alt="HighMemo's home screen on iPhone: the HighMemo wordmark and a memo count at the top left, five toolbar icons at the top right, memos as coloured dots gathered into clusters and labelled with the beginning of each memo's title, a small overview map at the bottom left, a hash button at the bottom right and a blue New Memo button at the bottom." />
+  </picture>
+  <figcaption>The home screen is the graph. Everything else opens on top of it.</figcaption>
+</figure>
+
+<p>HighMemo opens onto the graph rather than a list. The number next to the HighMemo name is how many memos you have.</p>
+
+<h3>The toolbar, left to right</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Icon</th><th>Opens</th></tr></thead>
+  <tbody>
+    <tr><td>List</td><td>The memo list, with search and filters — <a href="#list">section 5</a></td></tr>
+    <tr><td>Calendar</td><td>The month view with your reminders and, if connected, your events — <a href="#calendar">section 12</a></td></tr>
+    <tr><td>Map pin</td><td>The map of memos that have a place attached</td></tr>
+    <tr><td>Bell</td><td>The notification list: reminders that have fired and ones still scheduled</td></tr>
+    <tr><td>Gear</td><td>Settings — <a href="#settings">section 16</a></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Elsewhere on the screen</h3>
+<ul>
+  <li><strong>New Memo</strong> at the bottom opens the composer.</li>
+  <li>The <strong>circular button at the top right</strong> is the AI Assistant. Its ring also doubles as a status indicator while a model is downloading or a memo is being processed.</li>
+  <li>The <strong>small map at the bottom left</strong> is an overview of the whole graph; the visible area is outlined. Drag inside it to move around.</li>
+  <li>The <strong><code>#</code> button at the bottom right</strong> toggles the tag names on and off.</li>
+</ul>
+
+<h2 id="write">3. Writing a memo <a class="anchor" href="#write" aria-label="Link to this section">#</a></h2>
+
+<p>Tap <strong>New Memo</strong>. The composer opens as a sheet from the bottom, with a title field and a body field. The body accepts Markdown — its placeholder says so: <em>Supports Markdown. **bold**, *italic*, ## heading…</em></p>
+
+<p>Tap <strong>Save</strong> to store it. Saving does not wait for anything: the memo is on your device the moment you tap Save, and any AI work happens afterwards in the background. If that work fails, nothing you already wrote is changed.</p>
+
+<h3>The formatting bar</h3>
+<p>A single row of buttons above the editor, scrollable sideways: <strong>B</strong>, <strong>I</strong>, <strong>S</strong> (strikethrough), inline code, <strong>H1 H2 H3</strong>, bullet list, numbered list, task list, quote, code block, divider, <strong>Date</strong> (inserts today, formatted for your region), link, and image.</p>
+<p>Pinned at the right-hand end is a <strong>Preview</strong> / <strong>Edit</strong> toggle. Preview shows the Markdown rendered; Edit takes you back to the raw text. On iPhone and iPad you edit the raw Markdown and check it with Preview.</p>
+
+<h3>The composer's buttons</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Control</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td>Calendar icon, in the header</td><td>Stamps today's date into the title. Only when creating, not when editing.</td></tr>
+    <tr><td>Expand / collapse, in the header</td><td>Grows the composer to fill the screen.</td></tr>
+    <tr><td>Image icon</td><td>Picks photos from your library, several at once. iOS asks for photo access the first time; if you refuse, the picker cannot open.</td></tr>
+    <tr><td>Document icon</td><td>Picks files to attach.</td></tr>
+    <tr><td>Microphone icon</td><td>Dictates into the body. Tap once to start, again to stop; the icon turns red and a waveform animates while it listens. iOS asks for microphone and speech-recognition access the first time.</td></tr>
+    <tr><td>Bell icon</td><td>Sets a reminder. Appears when you are editing a memo that already exists — on a brand-new memo, save it first and use the clock icon in its detail view.</td></tr>
+    <tr><td>Amber clock icon</td><td>Appears only when an unsaved draft was left behind. Restores it.</td></tr>
+    <tr><td><strong>Cancel</strong> / <strong>Save</strong></td><td>Save is greyed out until there is text or an attachment.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Drafts</h3>
+<p>An unfinished new memo is kept for you: after a few seconds without typing, <em>Draft saved</em> appears. Close the composer and the amber clock icon brings it back next time.</p>
+
+<h3>Attachments</h3>
+<p>Attached images and files appear as thumbnails above the composer's footer. Tap a thumbnail to insert a reference to it inline in the body; tap the small <strong>×</strong> on it to remove it before saving. Files show their extension on the icon.</p>
+
+<p>When you attach a photo, HighMemo reads what it can from the picture itself: the date it was taken, the camera and lens, and — if the photo carries GPS coordinates — the place, whose name is looked up so it can be shown to you. Text <em>inside</em> the image is read too, using iOS's own text recognition, and becomes material for the memo's tags and summary.</p>
+
+<h3>Mentioning another memo or a person</h3>
+<p>Type <code>@</code> in the body and a row of suggestions appears under the editor: people you have mentioned before, your memos, and — if the calendar is connected — your events. Pick one and it becomes a link inside the text.</p>
+
+<!--
+  Captions C16 and C17 from 04_visual_manifest.md §13-6, verbatim, both **PASS**
+  (claim-verdicts.md §9-A). Keep them as two captions: the verdict gives three separate reasons not
+  to merge them — the link lifetimes are opposite (a merged sentence would be false at one end, which
+  is how C12 was rejected), a bare `@` offers people only because memo candidates need a typed
+  character, and neither frame reproduces a merged sentence on its own.
+  Two boundaries from the same verdict: the memo match is on the TITLE only, so "type any word from
+  the memo" is false; and "and the link stays" may not be added to the person caption.
+
+  Neither frame shows an EVENT chip: the demo device had no calendar events (§13-3 note 3). The
+  paragraph above mentions events because it is a reference document describing the feature, but no
+  caption or alt here claims the pictures show one.
+
+  Also worth knowing before "fixing" the second frame: the row shows only memos because memo and
+  event candidates need at least one typed character while people appear on a bare `@`
+  (useMentionSuggest.ts:106, :117). Neither cut is staged.
+-->
+<div class="shot-grid">
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-14_mention_person_typing.jpg" />
+      <img src="./img/ios-14_mention_person_typing.jpg" width="405" height="880" loading="lazy"
+           alt="A memo being written, its body ending: Rollback drill is Friday and still has no owner. Loop in @ — with three suggestion chips along the bottom of the composer reading Jonas PERSON, Mira PERSON and Priya PERSON, above the Cancel and Save buttons." />
+    </picture>
+    <figcaption>Type <code>@</code> while you write and the people you have mentioned before come up.</figcaption>
+  </figure>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-15_mention_memo_typing.jpg" />
+      <img src="./img/ios-15_mention_memo_typing.jpg" width="405" height="880" loading="lazy"
+           alt="Another memo being written, ending: Everything else is already written down in @Tokyo. The same suggestion row now offers memos — Tokyo packing list MEMO, Tokyo Trip — Plan MEMO, and a third chip running off the edge of the row." />
+    </picture>
+    <figcaption>The same <code>@</code> finds your own memos — type a name and pick the one you mean.</figcaption>
+  </figure>
+</div>
+<p>A memo you mention this way is linked to the one you are writing, and that link is permanent in one direction that matters: <strong>deleting the mention from the text does not delete the link</strong>, and no automatic rebuild ever removes it. Only you can.</p>
+
+<!--
+  Mentioning a memo and mentioning a person behave in OPPOSITE ways, and 04_visual_manifest.md §1
+  note 12 rejected a caption that promised both in one sentence. Keep them in separate sentences on
+  every page: memo mentions are add-only, people mentions are reconciled against the body text.
+-->
+<p><strong>A person works the other way round.</strong> There, the text is the record: take <code>@Priya</code> out of the body and Priya is no longer linked to that memo. Memo links outlive their mention; people links do not.</p>
+
+<div class="note">
+  <span class="note-title">Recently changed</span>
+  <p>Dictation was corrected just before this release so that it follows your device's language instead of a fixed one. If dictation transcribes into the wrong language on your device, that is worth reporting to <a href="mailto:highgarden0@gmail.com">highgarden0@gmail.com</a>.</p>
+</div>
+
+<h2 id="share">4. Sending things in from other apps <a class="anchor" href="#share" aria-label="Link to this section">#</a></h2>
+
+<p>HighMemo installs a <strong>share extension</strong>. In Safari, Photos, Mail or anything else with a Share button, tap Share and choose HighMemo. Text, links and images are accepted.</p>
+
+<p>A shared link is saved first and read afterwards, so it lands even on a bad connection. Once the page has been fetched, the memo fills in with the page's own title, the page's description as the summary, and its preview image as a thumbnail. Pages that do not publish those details still become a memo — the title is then derived from the page's own content and there is no thumbnail.</p>
+
+<h3>Pages whose content is inside pictures</h3>
+
+<!--
+  APPROVED WORDING — do not reword. The earlier sentence here ("the pictures themselves are not
+  kept") was rejected: the app can be killed between the read and the delete, and that window does
+  not close by design. Everything absolute is out — "always deleted", "never remains", "nothing is
+  left behind". What is approved is the sentence below, which says what is deleted and when the
+  leftovers are swept. Code: src/services/content-processor/linkImageText.ts (materialize /
+  dispose / sweepLinkImageCache).
+-->
+<p>On iPhone and Mac, HighMemo reads the text in a link's images using the system text recognition, and uses it to write the tags, title and summary. Those images are never added to your memo and never uploaded. A copy fetched for reading is deleted after it is read, and anything left by an interrupted read is cleared the next time you open the app.</p>
+
+<p>The recognised text is not stored either. What stays on the memo is what was written from it — the tags, the title and the summary — and if you have turned sync on, those travel to your Drive with the rest of the memo.</p>
+
+<p>This is not the same on every platform, so it is worth knowing which one you are on:</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Text inside a link's pictures</th><th></th><th>How</th></tr></thead>
+  <tbody>
+    <tr><td>iPhone and iPad</td><td><span class="plat on">read</span></td><td>iOS's own text recognition. Nothing to set up.</td></tr>
+    <tr><td>Mac</td><td><span class="plat on">read</span></td><td>macOS's own text recognition. Nothing to set up.</td></tr>
+    <tr><td>Android</td><td><span class="plat off">not read</span></td><td>HighMemo has no text-recognition engine on Android — see <a href="./guide-android.html#write">the Android guide, section 3</a>.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Sharing brings HighMemo to the front and opens the new memo, so you can see it landed; it is not a silent background hand-off. Sharing photos with no text alongside them produces a memo whose body notes how many you sent, ready for you to type over.</p>
+
+<p>Shared text that happens to be a link is treated as one: HighMemo recognises it and fetches the page.</p>
+
+<h2 id="list">5. The memo list, search and filters <a class="anchor" href="#list" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-01_memo_list.jpg" />
+    <img src="./img/ios-01_memo_list.jpg" width="405" height="880" loading="lazy"
+      alt="The memo list: a title reading Memos with a sort control, a Select button and a close button, a search field with the placeholder keyword, #tag, @person, a row of chips reading Filter, All, Pinned, Memos 45, Links 7 and Documents, and a list of memos each showing a type icon, a pin toggle, a title, a summary and a timestamp." />
+  </picture>
+  <figcaption>The list opens from the list icon in the toolbar. Counts on the chips are live.</figcaption>
+</figure>
+
+<h3>Search</h3>
+<p>The field's placeholder is its syntax: <span class="path">keyword, #tag, @person</span>.</p>
+
+<!--
+  The same screen, and the same caption, as the Android guide's search figure. C14, PASS'd.
+  FILENAMES DIFFER BY PLATFORM AND THAT IS DELIBERATE: iPhone is 16_search_person (new in the 4th
+  shoot), Android is 05_search_person (the file the Android guide already published, kept under its
+  own name so its links do not break). 04_visual_manifest.md §13-4. There is no android-16.
+-->
+<figure class="shot">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-16_search_person.jpg" />
+    <img src="./img/ios-16_search_person.jpg" width="405" height="880" loading="lazy"
+         alt="The memo list with @Mira typed into the search field, a count of 6 at the right-hand end of the field, and below it the six memos that mention her." />
+  </picture>
+  <figcaption>Type @ a person's name and every memo they are in comes back.</figcaption>
+</figure>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>You type</th><th>You get</th></tr></thead>
+  <tbody>
+    <tr><td>Plain words</td><td>Memos whose title, body or tags contain what you typed, anywhere inside them. Case does not matter.</td></tr>
+    <tr><td><code>#tag</code></td><td>Only memos carrying exactly that tag. Not a partial match — the whole tag name.</td></tr>
+    <tr><td><code>@name</code></td><td>Only memos linked to exactly that person. Someone's name written in a body but not mentioned with <code>@</code> will not match.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The button on the left of the field switches between the two modes; in tag mode the placeholder becomes <span class="path">#tag name</span>. Typing a <code>#</code> first switches for you.</p>
+<p>Every memo is searched, not just recent ones. Once the on-device search model is ready, meaning-based matches are <em>added</em> to these results — nothing is taken away, so a search never gets worse for having the model. Without the model you get exactly the keyword results. Meaning-based matching applies to plain words only, not to <code>#tag</code> or <code>@name</code>, which are meant to be exact.</p>
+
+<h3>Type chips</h3>
+<p><strong>All</strong>, <strong>Pinned</strong>, <strong>Memos</strong>, <strong>Links</strong>, <strong>Documents</strong> and <strong>Reminders</strong> — each with a live count. Tap one to narrow the list. Below them, chips for the tags you use most, so a topic is one tap away.</p>
+
+<h3>The Filter sheet</h3>
+<figure class="shot">
+  <img src="./img/ios-04_filter_collections_people.jpg" width="405" height="880" loading="lazy"
+       alt="The Filter sheet over the memo list, with a Folders section offering Create a folder, a Collections section showing All plus tag chips #tokyo-trip, #half-marathon and #side-project, and a People section showing @Mira with 6, @Jonas with 5 and @Priya with 3." />
+  <figcaption>Filter has three axes: Folders, Collections (tags) and People. Results update as you tap — there is no Apply button.</figcaption>
+</figure>
+
+<h3>Sorting</h3>
+<p>The up/down arrows next to the title offer <strong>Pinned First</strong> (the default), <strong>Newest</strong> and <strong>Updated</strong>. The icon is tinted while you are on anything but the default, so you can see at a glance that a sort is in force.</p>
+
+<h3>Selecting several memos</h3>
+<p>Tap <strong>Select</strong>. Then tap memos to tick them. A bar appears at the bottom with:</p>
+<ul>
+  <li><strong>Delete</strong> — removes the ticked memos.</li>
+  <li><strong>Create Document</strong> — combines them into a new document. See <a href="#documents">section 9</a>.</li>
+</ul>
+
+<h3>Deleting one memo</h3>
+<p>Swipe a row to the left and a delete action appears. It asks for confirmation.</p>
+
+<h3>Pinning</h3>
+<p>Each row has a pin toggle on its left. Pinned memos are collected under the <strong>Pinned</strong> chip.</p>
+
+<h3>What a row tells you</h3>
+<p>The title, two lines of the summary, and the date. Link memos show the site's icon and its address; memos with a picture show a thumbnail. A memo the AI is still working on shows a spinner and <em>AI processing…</em>.</p>
+
+<h3>The ad row</h3>
+<p>An ad appears as a row in this list, about once every twenty memos. It is labelled as sponsored. Ad requests carry no part of your memos.</p>
+
+<h2 id="detail">6. Opening a memo <a class="anchor" href="#detail" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot">
+  <img src="./img/ios-06_memo_related.jpg" width="405" height="880" loading="lazy"
+       alt="A memo in detail view showing a MEMO badge and a row of action icons, an AI-written Summary card, a checklist body, Created and Updated timestamps, a tag chip with an Add button, and a Related section listing one linked memo titled Tokyo Trip — Plan." />
+  <figcaption>The detail view. Summary appears once an AI provider has processed the memo.</figcaption>
+</figure>
+
+<p>Tap a memo — in the list or on the graph — to open it. The arrows at the top step through your memos in order; the number between them is your position.</p>
+
+<h3>The action row</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Icon</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td>Wand (purple)</td><td>Runs the AI over this memo again — a new title, summary, tags and category. Needs an AI provider. If it fails, your existing title, summary and tags are kept.</td></tr>
+    <tr><td>Map pin</td><td>Attaches or changes a place, and with it a location reminder — <a href="#reminders">section 11</a>.</td></tr>
+    <tr><td>Clock (amber)</td><td>Attaches or changes a time reminder.</td></tr>
+    <tr><td>Pencil</td><td>Edits the memo.</td></tr>
+    <tr><td>Share</td><td>Sends the memo out through the iOS share sheet.</td></tr>
+    <tr><td>Trash (red)</td><td>Deletes the memo.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>The sections down the page</h3>
+<ul>
+  <li><strong>Folder chip</strong> — which folder the memo is in, or <em>None</em>. Tap to move it.</li>
+  <li><strong>Reminder chip</strong> — shown when a reminder is set, with its date and time.</li>
+  <li><strong>Summary</strong> — written by the AI. Absent until an AI provider has processed the memo.</li>
+  <li><strong>The body</strong> — rendered Markdown. Checklists are tappable.</li>
+  <li><strong>Attachments</strong> — images and files on the memo.</li>
+  <li><strong>Created / Updated</strong> — timestamps.</li>
+  <li><strong>Tags</strong> — chips, plus <strong>+ Add</strong> to add one by hand.</li>
+  <li><strong>Related</strong> — the memos <em>you</em> linked, including anything you brought in with <code>@</code>. The <strong>+</strong> beside the heading links more. The <strong>×</strong> on a row unlinks it. On a document this section is called <strong>Sources</strong>, and those are the memos the AI reads when it writes the document.</li>
+  <li><strong>Recommend</strong> — memos that look similar. This list comes from the on-device search model, so it is empty until that model is ready. Nothing here is linked to your memo; it is a suggestion you can tap.</li>
+  <li><strong>Auto-collect related memos</strong> — on a document only. Leave it on and HighMemo offers to add newly written memos that look related to it.</li>
+</ul>
+
+<h3>Editing in place</h3>
+<p>Tap the title to correct it without opening the editor. Double-tap the body to open the editor. Tapping a link in the body follows the link rather than opening the editor, and ticking a checkbox just ticks it.</p>
+
+<h3>AI actions on one memo</h3>
+<p>The small circular button at the end of the title row opens five actions. Each needs an AI provider.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Action</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Ask AI</strong></td><td>Opens the assistant with this memo as its subject.</td></tr>
+    <tr><td><strong>Enhance</strong></td><td>Rewrites and tidies the memo's text.</td></tr>
+    <tr><td><strong>Summarize</strong></td><td>Produces a shorter version.</td></tr>
+    <tr><td><strong>Translate</strong></td><td>Translates it into your AI Language.</td></tr>
+    <tr><td><strong>Action items</strong></td><td>Pulls out the things to do as a checklist.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Attachments and the image viewer</h3>
+<p>Images and files sit in their own section. Tap an image to open it full screen — pinch to zoom, double-tap to zoom, swipe sideways between images. The viewer has <strong>Download</strong> to save to your photo library and a share button. Tap a file to save it; long-press anything to save it.</p>
+
+<h2 id="organize">7. Tags, folders, pinning and people <a class="anchor" href="#organize" aria-label="Link to this section">#</a></h2>
+
+<p>All four work with no account and no AI.</p>
+
+<h3>Tags</h3>
+<p>Tags arrive two ways: the AI adds them when it processes a memo, and you add them yourself with <strong>+ Add</strong> in the detail view. A tag is identified by its name, so a tag you type by hand and a tag the AI produced with the same word are the same tag — they cannot be duplicated.</p>
+<p>To rename or delete tags in bulk, open <span class="path">Settings → Data &amp; Storage → Tag Manager</span>. It has a search field, a memo count per tag, and a multi-select delete. Deleting there also removes the tag from every memo that carried it.</p>
+
+<h3>Collections</h3>
+<p><strong>Collections</strong> in the Filter sheet is your shortlist of tags. It starts empty, with the hint <em>Long-press a tag to pin it here</em> — do that on any tag chip in a memo and it joins the list. Long-press it in Collections to take it out again.</p>
+
+<h3>Folders</h3>
+<p>Create folders in the <strong>Filter</strong> sheet under <strong>Folders</strong>, with <em>Create a folder</em> or the folder-plus icon. Long-press a folder to <strong>Rename</strong> or <strong>Delete</strong> it. Move a memo by tapping its folder chip in the detail view, where <strong>New folder</strong> also makes one on the spot.</p>
+<p>A memo lives in one folder at a time, and folders do not nest.</p>
+
+<h3>People</h3>
+<p>Typing <code>@</code> and creating a new name makes that person available everywhere. People appear as their own axis in the <strong>Filter</strong> sheet with a count each, and <code>@name</code> in the search box matches them exactly.</p>
+
+<figure class="shot">
+  <img src="./img/ios-12_people_mentions.jpg" width="405" height="880" loading="lazy"
+       alt="A memo whose body mentions two people, @Jonas and @Priya, rendered as highlighted links inside the running text, with tag chips for standup and hiring underneath." />
+  <figcaption>Mention someone with <code>@</code> and every memo they are in is one tap away.</figcaption>
+</figure>
+
+<h2 id="graph">8. The graph view <a class="anchor" href="#graph" aria-label="Link to this section">#</a></h2>
+
+<p>Each dot is a memo. <strong>Memos that share a tag gather together, and the tag's name sits at the centre of the group.</strong> That grouping needs no AI, no account and no model — tags are enough. Memos that share no tag with anything collect under <em>Uncategorized</em>.</p>
+
+<figure class="shot">
+  <img src="./img/ios-05_tag_filter.jpg" width="405" height="880" loading="lazy"
+       alt="The memo list narrowed by a tag: chips reading #recipes 4, #code-review 4, #on-call 4 and #gym 3, with #on-call selected, and below it the four memos carrying that tag." />
+  <figcaption>Tapping a tag name on the graph does the same thing as this chip: it shows you the memos that share it. The count on the chip is how many memos are in that group.</figcaption>
+</figure>
+
+<div class="note">
+  <span class="note-title">There are no connecting lines on iPhone or iPad, and that is deliberate</span>
+  <p>The graph draws no lines between memos on iPhone or iPad. With thousands of memos there would be tens of thousands of lines and the view would stop being usable, so the app shows relatedness as <em>grouping</em> instead. To see what a particular memo is connected to, open it and read <strong>Related</strong> (the links you made) and <strong>Recommend</strong> (similar memos) — <a href="#detail">section 6</a>.</p>
+</div>
+
+<h3>Gestures</h3>
+<ul>
+  <li>Drag to move, pinch to zoom, and flick to keep gliding.</li>
+  <li><strong>Double-tap</strong> to step the zoom: in, in again, then out to fit everything. The point you tapped stays put.</li>
+  <li>Tap a dot to open that memo on top of the graph.</li>
+  <li>Tap a tag name to filter to that group and zoom to it. A pill appears at the top showing the tag; its <strong>×</strong> clears the filter.</li>
+  <li>Use the overview map at the bottom left to jump somewhere far away.</li>
+  <li>The <code>#</code> button switches between seeing tag groups and seeing individual memos.</li>
+</ul>
+
+<h3>What you see as you zoom</h3>
+<p>Zoomed out you see tag names, not memos — the busiest groups first, then more of them as you zoom in. Past a certain point the tag names give way to the memos themselves, then to their titles, then to their thumbnails. Exactly one of the two — groups or memos — is on screen at a time, so the view never becomes a mess of both.</p>
+
+<p>Dot colour follows the memo's category. A dashed pulsing ring around a dot means the AI has not finished with it yet.</p>
+
+<p>With no memos yet, the graph says <em>Add a memo to get started</em>.</p>
+
+<h2 id="documents">9. Documents <a class="anchor" href="#documents" aria-label="Link to this section">#</a></h2>
+
+<p>A document is a memo written <em>from</em> other memos. Requires an AI provider.</p>
+
+<ol>
+  <li>Open the memo list and tap <strong>Select</strong>.</li>
+  <li>Tick the memos you want to draw from.</li>
+  <li>Tap <strong>Create Document</strong>.</li>
+  <li>The sheet asks <em>What kind of document should these memos become?</em> Type what you want — the placeholder suggests <em>e.g. Weekly summary, Meeting notes…</em> — and tap <strong>Create</strong>.</li>
+</ol>
+
+<p>What you type here decides the shape of the result, not just its title: ask for a weekly report and you get one organised by date; ask for a comparison and you get a table. The memos you ticked become the document's <strong>Sources</strong>, listed in its detail view. Add or remove a source there and regenerate to rewrite it.</p>
+
+<p>Documents show under the <strong>Documents</strong> chip in the memo list and carry a book icon.</p>
+
+<h3>Adding more memos later</h3>
+<p>Open the document and tap <strong>+</strong> beside <strong>Sources</strong>. The memo list reopens in a picking mode — search, folders and collections all still work, and memos already used are left out. Tick what you want and confirm with <strong>Add <em>n</em> to document</strong>. The document is then rewritten with the new sources included.</p>
+<p>If you have edited the document by hand, HighMemo warns you first: regenerating may overwrite your edits.</p>
+
+<h3>Letting a document collect its own sources</h3>
+<p>In a document's detail view, <strong>Auto-collect related memos</strong>. With it on, when you write a memo that looks related HighMemo raises a small banner — <em>Add to "…"?</em> with an <strong>Add</strong> button. Nothing is added unless you tap it.</p>
+
+<h3>Without an AI provider</h3>
+<p>You can still make a document. It will be your chosen memos gathered under headings, in order — a tidy collection rather than a piece of writing. Connect an AI provider and regenerate to turn it into one.</p>
+
+<h2 id="assistant">10. AI Assistant <a class="anchor" href="#assistant" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-08_ai_assistant.jpg" />
+    <img src="./img/ios-08_ai_assistant.jpg" width="405" height="880" loading="lazy"
+      alt="The AI Assistant panel: a header reading AI Assistant with a model badge, an answer grouping memos by theme with memo titles listed under each, a row of preset buttons reading For today, Recent trends and Knowledge gaps, a caution that AI can make mistakes, and an input field reading Ask about your memos." />
+  </picture>
+  <figcaption>The badge next to the title is the model answering. Presets sit above the input field.</figcaption>
+</figure>
+
+<p>Open it with the circular button at the top right of the graph. It answers from your own memos. It needs an AI provider connected — with <strong>Text Rules Only</strong> selected, tapping it takes you to Settings instead, with the message <em>Set up AI in Settings</em>.</p>
+
+<p>Type into <span class="path">Ask about your memos…</span>, or tap a preset. The presets change depending on whether a memo is in context:</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>With no memo in context</th><th>With a memo in context</th></tr></thead>
+  <tbody>
+    <tr><td><strong>For today</strong> — what your day looks like against your memos</td><td><strong>About this memo</strong></td></tr>
+    <tr><td><strong>Recent trends</strong> — the last two weeks</td><td><strong>Find related</strong></td></tr>
+    <tr><td><strong>Knowledge gaps</strong> — the last month</td><td><strong>Enhance</strong></td></tr>
+    <tr><td><strong>Weekly summary</strong> — the last seven days</td><td><strong>Action items</strong></td></tr>
+    <tr><td><strong>Random connection</strong> — three memos at random, held up against each other</td><td></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Reading an answer</h3>
+<p>Memos the answer drew on appear as chips you can tap to open, and tags as chips that open the list filtered to them. Under each answer:</p>
+<ul>
+  <li><strong>Copy</strong></li>
+  <li><strong>Save as Memo</strong> — keeps the answer as a new memo</li>
+  <li><strong>Append to memo</strong> — adds it to the memo in context; checklists arrive as real checkboxes</li>
+  <li><strong>Translate</strong> — into your AI Language</li>
+</ul>
+<p>While an answer is streaming, the send button becomes a stop button. If a model you chose can read images, an attach button appears in the input row and you can send up to three.</p>
+
+<p>The panel carries the line <em>AI can make mistakes. Double-check important info.</em> That applies here as anywhere: the assistant summarises your memos, it does not verify them.</p>
+
+<p>If Google Calendar is connected, the titles of today's and tomorrow's events are included in what the assistant is told, so it can answer about your day. That means those titles go to whichever AI provider you configured.</p>
+
+<h2 id="reminders">11. Reminders <a class="anchor" href="#reminders" aria-label="Link to this section">#</a></h2>
+
+<p>Reminders work with nothing connected. iOS asks for notification permission the first time.</p>
+
+<h3>Time reminders</h3>
+<p>Open a memo and tap the <strong>clock</strong> icon. A sheet titled <em>Reminder</em> offers, in order:</p>
+<ul>
+  <li><strong>In 1 hour</strong> · <strong>In 3 hours</strong> · <strong>Tomorrow morning</strong> · <strong>Next Monday</strong> — each showing the date and time it works out to</li>
+  <li><strong>Custom…</strong> — pick a date, then a time</li>
+  <li><strong>Repeat</strong> — pick a time and one of <strong>No repeat</strong>, <strong>Daily</strong>, <strong>Weekly</strong> or <strong>Monthly</strong></li>
+  <li><strong>Clear reminder</strong> — removes it</li>
+</ul>
+<p>Those four repeat settings are the whole set. Weekly repeats on the weekday of the date you picked, and monthly on that day of the month.</p>
+<p>A memo with a reminder shows it as a chip in its detail view, appears in the calendar on that day, and is listed under the <strong>Reminders</strong> chip in the memo list.</p>
+
+<h3>Location reminders</h3>
+<p>Open a memo and tap the <strong>map pin</strong>. A full-screen map opens. Search for a place with <span class="path">Search place…</span> or tap the map to drop the pin; the pins of your other location memos show as dots so you can see what is already nearby. Set the <strong>Radius</strong> with the stepper — <strong>100&nbsp;m to 2&nbsp;km, in 50&nbsp;m steps</strong>, starting at 300&nbsp;m — then tap <strong>Set Reminder</strong>.</p>
+
+<p>When you arrive, the memo comes back. It fires <strong>once per visit</strong>: staying inside the area does not repeat it, and it re-arms when you leave. Setting one while you are already inside the area does not fire it immediately — you have to leave and come back.</p>
+
+<p>Arrival is decided by your device, and the notification is created on your device too.</p>
+
+<p>The <strong>map pin</strong> in the top toolbar opens <strong>Location Reminders</strong> — every memo that has a place, on one map. With none set it tells you so and points you at the pin icon inside a memo.</p>
+
+<div class="warn">
+  <span class="warn-title">Location reminders need two separate permissions</span>
+  <p>iOS asks for location access when you first attach a place. For a reminder to fire when HighMemo is <em>not</em> open, it also needs <strong>Always</strong> location access — you may be asked again later, or you can set it in <span class="path">iOS Settings → Privacy &amp; Security → Location Services → HighMemo</span>. With only <em>While Using the App</em>, arrival reminders will not reach you reliably. There is no location setting inside HighMemo; permission is requested at the map, per memo.</p>
+</div>
+
+<h3>The notification list</h3>
+<p>The <strong>bell</strong> in the toolbar collects four things in one list: reminders that have fired, arrivals at a place, reminders still to come, and problems worth telling you about (a sync failure, an AI provider error, an expired sign-in). Some of those are tappable and take you to the setting that fixes them.</p>
+<ul>
+  <li>The badge on the bell counts unread items. Opening the list does not mark everything read — <strong>Read all</strong> does.</li>
+  <li><strong>Done</strong> on a reminder row marks it dealt with.</li>
+  <li>Swipe a system message to the left to remove it.</li>
+</ul>
+
+<h2 id="calendar">12. Calendar <a class="anchor" href="#calendar" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./img/ios-dark-07_calendar_reminders.jpg" />
+    <img src="./img/ios-07_calendar_reminders.jpg" width="405" height="880" loading="lazy"
+      alt="The calendar view: a month grid for August 2026 with a Today button and dots marking days that have entries, and beneath it the agenda for Friday, August 14 showing a 10:00 AM row titled Tokyo packing list with a Reminder badge." />
+  </picture>
+  <figcaption>Your reminders appear here with no account. Google events appear once the calendar is connected.</figcaption>
+</figure>
+
+<p>The calendar icon in the toolbar opens a month grid. Days with something on them carry a dot; tap a day to see it below, or swipe sideways to change month. <strong>Today</strong> jumps back. Your own memo reminders show here whether or not you connect anything, marked with a bell and a <em>Reminder</em> badge; tapping one opens the memo.</p>
+
+<h3>Connecting Google Calendar</h3>
+<p>Go to <span class="path">Settings → Sync &amp; Services</span>, connect Google (see <a href="#sync">section 15</a>), then use <strong>Connect Calendar</strong>. Your calendars appear grouped by account, each with a checkbox — untick the ones you do not want to see. <strong>Add Calendar Account</strong> adds a second Google account for calendar only.</p>
+
+<p><strong>Access is read-only.</strong> HighMemo never creates, edits or deletes an event. Events cover about <strong>a month back and three months ahead</strong>, refresh about every 30 minutes while the app is open, and you can force it with <strong>Sync Now</strong>.</p>
+
+<div class="note">
+  <span class="note-title">A month outside that window looks empty</span>
+  <p>Swiping sideways is not stopped at the edges of the fetched window, so you can keep going into months HighMemo has not asked Google about. Those months show nothing — which looks exactly like a month with nothing in it. If a month more than three ahead, or more than one behind, comes up blank, that is the window rather than your calendar. Your own memo reminders are not affected; they are stored on the device and show in any month.</p>
+</div>
+
+<p class="sub">There is also a ceiling of 2,500 events per fetch. Inside a four-month window you are unlikely ever to meet it.</p>
+
+<p>Google events and your reminders are merged into one timeline for the day, in time order. An event shows its title, start and end, and its location; all-day events are marked as such.</p>
+
+<h3>Events and memos together</h3>
+<ul>
+  <li><strong>Add memo</strong>, under an event, starts a memo already attached to it. You do not have to expand the row first — the button is there on every Google event, with any memos already linked to it as chips just above.</li>
+  <li>When you save a memo, HighMemo <em>suggests</em> an event that looks related — a small banner reading <em>Link to "…"?</em> with a <strong>Link</strong> button. Nothing is linked unless you tap it.</li>
+  <li>A memo's linked events appear in its detail view, where you can add more or unlink one.</li>
+</ul>
+<p>You can only see events; there is no way to create, change or delete one from HighMemo, by design.</p>
+
+<h2 id="ai">13. Setting up AI <a class="anchor" href="#ai" aria-label="Link to this section">#</a></h2>
+
+<p>Three routes, and you can also take none. Whichever you pick, HighMemo has no server in the middle and no AI of its own.</p>
+
+<h3>Route 1 — a cloud provider, with your own key</h3>
+
+<figure class="shot">
+  <img src="./img/ios-09_settings_cloud_providers.jpg" width="405" height="880" loading="lazy"
+       alt="The Cloud AI Providers section of Settings, listing providers with a status badge each, a masked API key and the model in use." />
+  <figcaption><span class="path">Settings → Cloud AI Providers</span>. A provider shows <em>No Key</em> until you paste one.</figcaption>
+</figure>
+
+<p>Open <span class="path">Settings → Cloud AI Providers</span>, tap a provider, and paste the API key of an account you already have. <strong>Get API key →</strong> takes you to the right page if you do not. Saving a key selects that provider and its default model; <strong>Change</strong> under MODEL picks a different one.</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Provider</th><th>Default model</th></tr></thead>
+  <tbody>
+    <tr><td>Groq (Free)</td><td>Llama 3.1 8B Instant</td></tr>
+    <tr><td>Google Gemini</td><td>Gemini 2.5 Flash Lite</td></tr>
+    <tr><td>OpenAI</td><td>GPT-5 nano</td></tr>
+    <tr><td>Anthropic Claude</td><td>Claude Haiku 4.5</td></tr>
+    <tr><td>Mistral</td><td>Mistral Small</td></tr>
+    <tr><td>Perplexity</td><td>Sonar</td></tr>
+    <tr><td>Alibaba Qwen</td><td>Qwen Plus</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Requests go from your device straight to the provider you chose, under your key. Your key is stored on your device and is not included in anything HighMemo syncs. What you send is subject to that provider's own terms — the <a href="./privacy.html">privacy policy</a> lists them.</p>
+
+<h3>Route 2 — a model that runs on the device</h3>
+
+<!--
+  NO SCREENSHOT HERE ON PURPOSE. A capture of this exact screen exists
+  (_workspace/promo/assets/screenshots/ios/11_settings_ondevice_models.png) and is on hold: it shows
+  third-party model names and trademarks, and RELEASE_READINESS.md C13/E-6 puts that decision with
+  the user, not with us. 04_visual_manifest.md §1 note 11 records the hold. Until it clears, the cut
+  goes on no surface at all — store or guide. Do not substitute the Android gate cut either: that is
+  a different screen.
+-->
+
+<p>Under <span class="path">Settings → Local AI</span>, <strong>On-device Models</strong> lists models you can download and run locally. No account, no key. Download one — sizes run from 0.8&nbsp;GB to 2.5&nbsp;GB, so use Wi-Fi; HighMemo warns you if you are on cellular — then tap <strong>Ready</strong> to activate it. The badge becomes <strong>Active</strong>.</p>
+
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Model</th><th>Download</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Gemma 3 1B</td><td>0.8 GB</td><td>Lightest</td></tr>
+    <tr><td>Qwen3 1.7B</td><td>1.1 GB</td><td>Recommended</td></tr>
+    <tr><td>Qwen3.5 2B</td><td>1.3 GB</td><td></td></tr>
+    <tr><td>Kanana 1.5 2.1B</td><td>1.5 GB</td><td>Korean-tuned</td></tr>
+    <tr><td>Phi-4-mini 3.8B</td><td>2.5 GB</td><td>Heaviest text model</td></tr>
+    <tr><td>Gemma 4 E2B</td><td>2.2 GB</td><td></td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>With one of these active, your memo text is processed on the device and does not leave it, and it works with no internet connection. Other things still use the network — ads, and syncing if you turned it on.</p>
+
+<p>The trash icon on a downloaded model frees its space. <strong>Reload</strong> on the active model reloads it if it has stopped responding.</p>
+
+<!--
+  APPROVED WORDING, minus the Android clause. The full approved paragraph opens with "On Android,
+  the on-device chat model is hidden when the device has less than 7 GB of memory or its hardware
+  class is older than 2021". That rule is gated to Android in the code on purpose (Metal / unified
+  memory), so NEVER put 7 GB or 2021 on this page. What survives here is the platform-wide half:
+  the first-run speed check, and the ~4.5 GB floor that also switches the embedding off.
+  The only change from the approved text is that "it is also hidden" got its subject back, because
+  the clause it referred to is the Android one and is not on this page.
+  Source: src/services/device/deviceSpec.ts — isLowSpecDevice, isOnDeviceAiWeak, isLocalLlmAllowed,
+  isEmbeddingAllowed. The earlier version of this block blamed memory alone, which was wrong.
+-->
+<div class="warn">
+  <span class="warn-title">Some iPhones and iPads cannot run these</span>
+  <p>On any platform the on-device chat model is hidden if a first-run speed check finds it too slow. Semantic search keeps running on the device in those cases. Only on devices with very little memory (under about 4.5&nbsp;GB) is on-device embedding switched off as well.</p>
+  <p>Where it is hidden you get a card reading <em>On-device chat AI is off on this device</em>, pointing you at a cloud provider instead. This is a deliberate guard against crashing, not a fault. The card's own wording talks about memory even when the reason was the speed check.</p>
+</div>
+
+<h3>Route 3 — Apple Intelligence</h3>
+<p>On iPhones and iPads that support it, <strong>Apple Intelligence</strong> appears at the top of the on-device model list, marked <em>Built-in</em>. There is nothing to download. If the row shows:</p>
+<ul>
+  <li><strong>Turn On</strong> — Apple Intelligence is off in iOS. HighMemo offers to open the Settings app; switch it on under <span class="path">Apple Intelligence &amp; Siri</span> and come back.</li>
+  <li><strong>Downloading</strong> — iOS is still fetching Apple's model in the background. Wait.</li>
+  <li><strong>Unavailable</strong> — it cannot be used right now, with the reason shown.</li>
+</ul>
+<p>If your device does not support Apple Intelligence at all, the row is not shown. Use <strong>Refresh Models</strong> after changing anything in iOS Settings.</p>
+
+<h3>Route 4 — no AI</h3>
+<p><span class="path">Settings → Local AI → Text Rules Only (no AI)</span> turns AI off entirely. Memos still get a title and short summary derived from their own text by a plain rule, with no model involved. This is also what happens before you configure anything.</p>
+
+<h3>What the AI produces</h3>
+<p>Once a provider is connected, every memo you save comes back — a few seconds later, in the background — with a title, a summary, tags and a category. The category is what colours the memo's dot on the graph.</p>
+
+<!--
+  APPROVED WORDING — do not reword and do not put the number back. "One of 21 categories" was
+  rejected (02_verifier_claims.md §7 case 7): the 21 are an instruction in the prompt, nothing
+  enforces them, whatever the model returns is stored unchecked, and the graph knows 15 colours.
+  The landing page carries "a category" with no number; the guides carry the sentence below,
+  because a manual has to be able to answer "why is this dot grey?".
+-->
+<p>The AI is asked to pick a category. The value is stored as it comes back, and the graph has colours for 15 of them — anything else takes a default colour. That is why an occasional dot is grey while its neighbours are not.</p>
+
+<p class="sub">The categories with no colour of their own are kids, camping, fashion, pet, art and other.</p>
+
+<p>If the AI fails or you are offline, your memo is untouched: existing titles, summaries and tags are kept rather than replaced.</p>
+
+<h3>What language the AI writes in</h3>
+<p><span class="path">Settings → Display → AI Language</span> sets it. <strong>Auto</strong> is the default and follows the memo. Fourteen languages can be chosen explicitly: English, 한국어, 日本語, 中文, Español, Français, Deutsch, Português, Tiếng Việt, ไทย, Indonesia, العربية, Русский, हिन्दी. This setting affects AI output only — the interface stays in English.</p>
+
+<h2 id="search-model">14. The on-device search model <a class="anchor" href="#search-model" aria-label="Link to this section">#</a></h2>
+
+<p>Separate from everything in section 13, and much smaller. This model turns your memos into vectors so HighMemo can find things by meaning rather than by matching letters. It powers meaning-based search results and the <strong>Recommend</strong> list. It always runs on your device, whichever AI provider you use, and the vectors it produces are not sent anywhere.</p>
+
+<h3>The first-launch question</h3>
+<p>On the very first launch a dialog titled <em>Improve search quality?</em> offers the download — about 330&nbsp;MB, Wi-Fi recommended — with <strong>Download</strong> and <strong>Not now</strong>.</p>
+
+<ul>
+  <li><strong>Download</strong> — it downloads in the background. The ring around the AI button shows progress. The app stays usable throughout.</li>
+  <li><strong>Not now</strong> — HighMemo does not download it, and remembers that answer. You will not be asked again, and it will not be fetched quietly later.</li>
+</ul>
+
+<h3>Getting it later, or checking on it</h3>
+<p>Go to <span class="path">Settings → Local AI → Semantic Search Model</span>. The <strong>Embedding Model</strong> row says which state it is in — <em>Ready — semantic search enabled</em>, <em>Downloading… n%</em>, or <em>Not downloaded — using keyword search</em> — and offers a <strong>Download</strong> button when it is missing. <strong>Pressing that button is also what clears an earlier "Not now".</strong></p>
+
+<p>There is no on/off switch for meaning-based search. It works when the model is ready and does not when it is not.</p>
+
+<p>One kind of device never gets it: where there is very little memory — under about 4.5&nbsp;GB — this model is switched off along with the chat models of <a href="#ai">section 13</a>, so the first-launch question does not appear and search matches letters. A device held back only by the speed check <em>does</em> run it.</p>
+
+<h3>The semantic index</h3>
+<p>Below it, <strong>Semantic Index</strong> reports how many memos have been indexed. Indexing happens on its own after the model is ready, but you can drive it:</p>
+<ul>
+  <li><strong>Index <em>n</em></strong> or <strong>Build</strong> — process the memos that are not indexed yet.</li>
+  <li><strong>Rebuild</strong> — start over and re-index everything.</li>
+  <li><strong>Stop</strong> — halt a run in progress.</li>
+</ul>
+<p>These are greyed out until the model is ready. Until a memo is indexed, it is still found by keyword — it just will not appear in meaning-based results.</p>
+
+<h2 id="sync">15. Sync with your Google Drive <a class="anchor" href="#sync" aria-label="Link to this section">#</a></h2>
+
+<figure class="shot">
+  <img src="./img/ios-10_settings_local_and_sync.jpg" width="405" height="880" loading="lazy"
+       alt="Settings showing the local AI and Cloud Sync sections, with sync provider options None and Google." />
+  <figcaption><span class="path">Settings → Sync &amp; Services → Cloud Sync</span>. The default is <strong>None</strong>.</figcaption>
+</figure>
+
+<p>Connect a Google account and your iPhone, iPad and Mac see the same memos. They are stored in <strong>your own Google Drive app-data folder</strong> — a private per-app area of your Drive. There is no HighMemo server and no HighMemo account, so nobody at HighMemo can look at them. Images and attachments travel too.</p>
+
+<h3>Turning it on</h3>
+<ol>
+  <li><span class="path">Settings → Sync &amp; Services → Cloud Sync</span> and choose <strong>Google</strong>.</li>
+  <li>Tap <strong>Connect Google</strong> and sign in.</li>
+</ol>
+
+<div class="warn">
+  <span class="warn-title">One sign-in asks for two permissions</span>
+  <p>Connecting sync requests app-data folder access <strong>and</strong> read-only calendar access <em>in the same consent screen</em>. There is no way to grant only one. If you want sync but not the calendar, simply do not connect the calendar afterwards — HighMemo will not read your events until you do.</p>
+</div>
+
+<h3>When it runs</h3>
+<p>When you open the app, and every <strong>5 minutes</strong> while it is open. <strong>Sync Now</strong> runs it immediately. There is no background sync while the app is closed, and no interval to configure — the card shows <strong>Status</strong> and <strong>Last sync</strong> so you can see where it stands.</p>
+
+<p>That 5-minute cycle exists only while Drive sync is actually set up and signed in. If it is not — no provider chosen, or the sign-in has expired — there is no slow sync going on in the background: nothing is scheduled at all. So a stale <strong>Last sync</strong> is worth reading as "check that it is still connected" rather than "wait longer".</p>
+
+<h3>Turning it off, and deleting what was uploaded</h3>
+<p><strong>Disconnect</strong> stops all uploads and signs the account out. That does not delete the copy already in your Drive. To remove that, revoke HighMemo in your <a href="https://myaccount.google.com/permissions" rel="noopener noreferrer" target="_blank">Google Account permissions</a> — which deletes the app-data folder.</p>
+
+<h3>If sync starts failing</h3>
+<p>A stale sign-in shows as an error and a message that the token expired. <strong>Disconnect</strong> and <strong>Connect Google</strong> again.</p>
+
+<h2 id="settings">16. Settings reference <a class="anchor" href="#settings" aria-label="Link to this section">#</a></h2>
+
+<p>The gear icon in the toolbar. Sections in the order they appear.</p>
+
+<h3>Appearance</h3>
+<p><strong>Dark</strong> / <strong>Light</strong> / <strong>System</strong>.</p>
+
+<h3>Cloud AI Providers</h3>
+<p>The seven providers, their keys and models — <a href="#ai">section 13</a>.</p>
+
+<h3>Local AI</h3>
+<ul>
+  <li><strong>Semantic Search Model</strong> — the search model and the semantic index (<a href="#search-model">section 14</a>).</li>
+  <li><strong>On-device Models</strong> — download and activate a local model, including Apple Intelligence (<a href="#ai">section 13</a>). Hidden on devices that cannot run one.</li>
+  <li><strong>Refresh Models</strong> — re-checks what is installed and re-checks Apple Intelligence.</li>
+  <li><strong>Text Rules Only (no AI)</strong> — no model at all.</li>
+</ul>
+
+<h3>Sync &amp; Services</h3>
+<ul>
+  <li><strong>Cloud Sync</strong> — <strong>None</strong> or <strong>Google</strong>, then the Drive card with <strong>Sync Now</strong> and <strong>Disconnect</strong> (<a href="#sync">section 15</a>).</li>
+  <li><strong>Calendar (read-only)</strong> — appears once Google is connected. Per-calendar checkboxes, <strong>Add Calendar Account</strong>, <strong>Sync Now</strong>, <strong>Disconnect All</strong> (<a href="#calendar">section 12</a>).</li>
+</ul>
+
+<h3>Display</h3>
+<p><strong>AI Language</strong> — the language the AI writes titles, tags, summaries and answers in. Default <strong>Auto</strong>.</p>
+
+<h3>Data &amp; Storage</h3>
+<ul>
+  <li><strong>Total Memos</strong> and <strong>Storage Estimate</strong> — read-only.</li>
+  <li><strong>Tag Manager</strong> — search, select and delete tags in bulk.</li>
+  <li><strong>Export data</strong> / <strong>Import data</strong> / <strong>Reset All Data</strong> — <a href="#data">section 17</a>.</li>
+</ul>
+
+<h3>About</h3>
+<p>Version number, <strong>Open Source Licenses</strong> (searchable), and a link to this site's <a href="./privacy.html">privacy policy</a>.</p>
+
+<div class="note">
+  <span class="note-title">Things that are not in Settings</span>
+  <ul>
+    <li><strong>No sync passphrase.</strong> There is no encryption control in the app.</li>
+    <li><strong>No switch for meaning-based search.</strong> It follows the model's state.</li>
+    <li><strong>No ad settings.</strong> There is no paid or ad-free version.</li>
+    <li><strong>No location section.</strong> Location permission is asked for at the map, per memo.</li>
+    <li><strong>No sync interval.</strong> Sync runs on open and every 5 minutes while open.</li>
+  </ul>
+</div>
+
+<h2 id="data">17. Export, import and reset <a class="anchor" href="#data" aria-label="Link to this section">#</a></h2>
+
+<h3>Export</h3>
+<p><span class="path">Settings → Data &amp; Storage → Export data</span> writes a single JSON file named <span class="path">HighMemo-backup-<em>date</em>-<em>time</em>.json</span> and opens the iOS share sheet so you can put it wherever you like. It contains memos, tags, folders, links and your attached photos embedded in the file itself.</p>
+<p>One exception worth knowing: thumbnails that came from a shared web page are stored as the web address they came from, so they are references rather than embedded copies.</p>
+<p>There is no Markdown or PDF export. JSON is the only format.</p>
+
+<h3>Import</h3>
+<p><strong>Import data</strong> reads a backup file back in and <strong>merges</strong> it. Nothing is deleted by importing, and re-importing the same file does not create duplicates.</p>
+
+<h3>Reset All Data</h3>
+<p>Deletes every memo, tag, folder and link, on this device <em>and</em> in your Drive copy including uploaded images. It asks for confirmation first. It deliberately keeps your settings, API keys, Google connection, language and appearance — it clears content, not configuration.</p>
+
+<h2 id="permissions">18. Permissions and what leaves the device <a class="anchor" href="#permissions" aria-label="Link to this section">#</a></h2>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>iOS asks for</th><th>When</th><th>If you refuse</th></tr></thead>
+  <tbody>
+    <tr><td>Photos</td><td>First time you attach a photo</td><td>The picker cannot open. Everything else works.</td></tr>
+    <tr><td>Microphone &amp; Speech Recognition</td><td>First time you use dictation</td><td>Dictation is unavailable. Typing is unaffected.</td></tr>
+    <tr><td>Notifications</td><td>First time you set a reminder</td><td>Reminders will not reach you.</td></tr>
+    <tr><td>Location</td><td>First time you attach a place to a memo</td><td>Location reminders cannot fire. Nothing else changes.</td></tr>
+    <tr><td>Tracking (App Tracking Transparency)</td><td>Shortly after first launch, for ads</td><td>Ads still appear; iOS withholds the advertising identifier.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>The short version of what goes out, with nothing connected: ad requests, and — if a photo you attach carries GPS coordinates in its metadata — a lookup of those coordinates against OpenStreetMap's naming service so the place can be named. Everything else is on your device until you connect something.</p>
+
+<p>The full account, including what each AI provider receives, is in the <a href="./privacy.html">privacy policy</a>.</p>
+
+<h2 id="trouble">19. Troubleshooting <a class="anchor" href="#trouble" aria-label="Link to this section">#</a></h2>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>What you see</th><th>Why, and what to do</th></tr></thead>
+  <tbody>
+    <tr><td>Memos have no summary, tags or category</td><td>No AI provider is connected. <a href="#ai">Section 13</a>. Existing memos get them when you tap the wand icon in the detail view.</td></tr>
+    <tr><td><strong>Recommend</strong> is always empty</td><td>The on-device search model is not ready. Check <span class="path">Settings → Local AI → Semantic Search Model</span>. <strong>Related</strong> is separate and only ever holds links you made yourself.</td></tr>
+    <tr><td>Search misses something you know you wrote</td><td>Plain keyword search matches the letters you type. Try a word that is literally in the memo, or wait for the search model to finish indexing.</td></tr>
+    <tr><td>The graph shows no lines</td><td>By design on iPhone and iPad. <a href="#graph">Section 8</a>.</td></tr>
+    <tr><td>The on-device model list is missing</td><td>Either the first-run speed check found this device too slow, or it has very little memory. Use a cloud provider, or Apple Intelligence if your device supports it — <a href="#ai">section 13</a>.</td></tr>
+    <tr><td><strong>Apple Intelligence</strong> is not in the list</td><td>Your device does not support it. If it does but is switched off, the row appears reading <strong>Turn On</strong>.</td></tr>
+    <tr><td>A location reminder never fires</td><td>Location is probably set to <em>While Using the App</em>. Arrival reminders need <strong>Always</strong>. See <a href="#reminders">section 11</a>.</td></tr>
+    <tr><td>Sync says the token expired</td><td><strong>Disconnect</strong> then <strong>Connect Google</strong> again.</td></tr>
+    <tr><td>Your Mac and iPhone disagree</td><td>Sync runs on open and every 5 minutes while open. Tap <strong>Sync Now</strong> on both.</td></tr>
+    <tr><td>A memo shows a dashed ring on the graph</td><td>The AI has not finished with it. It goes away by itself.</td></tr>
+    <tr><td>The 330&nbsp;MB download never started</td><td>You chose <strong>Not now</strong>, which is remembered. Press <strong>Download</strong> under <span class="path">Settings → Local AI → Semantic Search Model</span>.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Anything else: <a href="mailto:highgarden0@gmail.com">highgarden0@gmail.com</a>.</p>
+
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot-in">
+    <div>HighMemo · Made by HighGarden · <a href="mailto:highgarden0@gmail.com">highgarden0@gmail.com</a></div>
+    <div class="site-foot-links">
+      <a href="./index.html">Home</a>
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms of Service</a>
+      <a href="./guide-android.html">Android guide</a>
+      <a href="./guide-desktop.html">Mac guide</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
